@@ -10,14 +10,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync files to Yandex Object Storage
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --follow-symlinks --delete
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
+
+      - name: Sync to Yandex Object Storage
         env:
-          AWS_S3_BUCKET: ${{ secrets.YC_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
-          AWS_S3_ENDPOINT: https://storage.yandexcloud.net
-          AWS_REGION: ru-central1
-          SOURCE_DIR: '.'
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_ENDPOINT_URL: https://storage.yandexcloud.net
+        run: |
+          aws s3 sync . s3://${{ secrets.YC_BUCKET_NAME }} \
+            --endpoint-url=https://storage.yandexcloud.net \
+            --acl public-read \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --delete
