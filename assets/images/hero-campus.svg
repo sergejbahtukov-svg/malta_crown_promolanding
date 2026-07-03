@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Abstract Malta campus placeholder">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8dfb8"/>
+      <stop offset="0.48" stop-color="#fffdf2"/>
+      <stop offset="1" stop-color="#bcc7d9"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0a1f56"/>
+      <stop offset="1" stop-color="#5c7898"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3d6a6"/>
+      <stop offset="1" stop-color="#c99d67"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#sky)"/>
+  <circle cx="930" cy="210" r="94" fill="#fff5d8"/>
+  <rect y="860" width="1200" height="640" fill="url(#sea)"/>
+  <path d="M0 800 C190 760 296 846 454 806 C641 759 742 706 922 744 C1044 770 1112 818 1200 790 L1200 1500 L0 1500 Z" fill="#fffdf2" opacity=".72"/>
+  <g transform="translate(160 398)">
+    <rect x="80" y="220" width="650" height="430" rx="10" fill="url(#stone)"/>
+    <rect x="142" y="296" width="82" height="128" rx="41" fill="#6d625c" opacity=".45"/>
+    <rect x="282" y="296" width="82" height="128" rx="41" fill="#6d625c" opacity=".45"/>
+    <rect x="422" y="296" width="82" height="128" rx="41" fill="#6d625c" opacity=".45"/>
+    <rect x="562" y="296" width="82" height="128" rx="41" fill="#6d625c" opacity=".45"/>
+    <rect x="116" y="492" width="560" height="50" fill="#37271c" opacity=".18"/>
+    <path d="M64 220 L405 20 L746 220 Z" fill="#bd1e24"/>
+    <path d="M405 60 L664 220 L146 220 Z" fill="#fffdf2" opacity=".38"/>
+    <rect x="355" y="448" width="104" height="202" rx="52" fill="#37271c" opacity=".62"/>
+  </g>
+  <g fill="#fffdf2" opacity=".74">
+    <circle cx="160" cy="176" r="12"/>
+    <circle cx="205" cy="158" r="7"/>
+    <circle cx="1014" cy="520" r="10"/>
+    <circle cx="1058" cy="548" r="6"/>
+  </g>
+</svg>
