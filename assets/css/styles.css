@@ -526,65 +526,6 @@ body {
   white-space: nowrap;
 }
 
-.mc-hero__ticker {
-  position: absolute;
-  right: 18px;
-  top: 76px;
-  z-index: 4;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  min-height: 44px;
-  overflow: hidden;
-  padding: 8px 14px 8px 66px;
-  border: 1px solid rgba(55, 39, 28, 0.15);
-  border-radius: 18px 18px 18px 4px;
-  background:
-    linear-gradient(135deg, var(--mc-brown), var(--mc-brown-2)),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 18px);
-  box-shadow: 0 18px 42px rgba(55, 39, 28, 0.18);
-  transform: rotate(4deg);
-}
-
-.mc-hero__ticker::before {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  color: #ffe5a6;
-  content: "motto";
-  font-size: 9px;
-  font-weight: 950;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  text-transform: uppercase;
-  transform: translateY(-50%);
-}
-
-.mc-hero__ticker span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  border-radius: 10px 10px 10px 3px;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  padding: 0 10px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.mc-hero__ticker span:nth-child(2) {
-  background: var(--mc-red);
-  color: #fff;
-}
-
-.mc-hero__ticker span:nth-child(4) {
-  color: #ffe2a2;
-}
-
 .mc-hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
@@ -632,60 +573,16 @@ body {
   line-height: 1.56;
 }
 
-.mc-deadline-note {
-  position: relative;
+.mc-hero__lead--expanded {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(126px, 0.3fr);
-  gap: 10px 16px;
-  width: min(100%, 610px);
-  overflow: hidden;
-  border: 1px solid rgba(189, 30, 36, 0.2);
-  border-radius: 18px 18px 18px 4px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 223, 0.72)),
-    repeating-linear-gradient(90deg, rgba(31, 111, 122, 0.055) 0 1px, transparent 1px 22px);
-  box-shadow: 0 18px 42px rgba(55, 39, 28, 0.09);
-  padding: 15px 16px 15px 19px;
+  max-width: 650px;
+  gap: 10px;
 }
 
-.mc-deadline-note--hero {
-  margin-top: 16px;
+.mc-hero__lead--expanded p {
+  margin: 0;
 }
 
-.mc-deadline-note::before {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 6px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--mc-red), var(--mc-gold), var(--mc-sea));
-  content: "";
-}
-
-.mc-deadline-note::after {
-  position: absolute;
-  right: 14px;
-  top: 0;
-  width: 28px;
-  height: 40px;
-  background:
-    linear-gradient(180deg, rgba(189, 30, 36, 0.18), rgba(216, 166, 72, 0.14)),
-    repeating-linear-gradient(90deg, rgba(31, 111, 122, 0.12) 0 1px, transparent 1px 7px);
-  clip-path: var(--mc-bookmark-shape);
-  content: "";
-  opacity: 0.72;
-  pointer-events: none;
-}
-
-.mc-deadline-note__date {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-}
-
-.mc-deadline-note__date span,
 .mc-admissions__deadline span {
   color: var(--mc-red);
   font-size: 10px;
@@ -695,38 +592,6 @@ body {
   text-transform: uppercase;
 }
 
-.mc-deadline-note__date strong {
-  color: var(--mc-ink);
-  font-size: 21px;
-  font-weight: 950;
-  line-height: 1.05;
-}
-
-.mc-deadline-note p {
-  position: relative;
-  z-index: 1;
-  max-width: 360px;
-  margin: 0;
-  color: var(--mc-muted);
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.35;
-}
-
-.mc-deadline-note__counter {
-  position: relative;
-  z-index: 1;
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  display: grid;
-  min-height: 74px;
-  align-content: center;
-  justify-items: start;
-  border-left: 1px dashed rgba(55, 39, 28, 0.22);
-  padding-left: 16px;
-}
-
-.mc-deadline-note__counter strong,
 .mc-admissions__deadline-count strong {
   color: var(--mc-red-dark);
   font-family: var(--mc-font-serif);
@@ -737,7 +602,6 @@ body {
   white-space: nowrap;
 }
 
-.mc-deadline-note__counter small,
 .mc-admissions__deadline-count small {
   max-width: 110px;
   color: var(--mc-brown);
@@ -754,78 +618,6 @@ body {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 18px;
-}
-
-.mc-hero__proof {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 18px;
-}
-
-.mc-hero__proof div {
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  gap: 8px;
-  min-height: 102px;
-  align-content: end;
-  border: 1px solid rgba(55, 39, 28, 0.12);
-  border-radius: 16px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 247, 223, 0.54)),
-    repeating-linear-gradient(135deg, rgba(216, 166, 72, 0.08) 0 1px, transparent 1px 18px);
-  padding: 30px 14px 14px;
-  box-shadow: 0 18px 42px rgba(55, 39, 28, 0.08);
-}
-
-.mc-hero__proof div::before {
-  position: absolute;
-  left: 14px;
-  top: 12px;
-  color: var(--mc-red);
-  font-size: 9px;
-  font-weight: 950;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  content: "school record";
-}
-
-.mc-hero__proof div:nth-child(2)::before {
-  content: "class register";
-}
-
-.mc-hero__proof div::after {
-  position: absolute;
-  right: 18px;
-  top: 0;
-  width: 30px;
-  height: 46px;
-  border: 0;
-  border-radius: 0;
-  background:
-    linear-gradient(180deg, rgba(189, 30, 36, 0.18), rgba(216, 166, 72, 0.18)),
-    repeating-linear-gradient(90deg, rgba(31, 111, 122, 0.16) 0 1px, transparent 1px 7px),
-    rgba(255, 255, 255, 0.72);
-  clip-path: var(--mc-bookmark-shape);
-  content: "";
-  filter: drop-shadow(0 10px 14px rgba(55, 39, 28, 0.12));
-}
-
-.mc-hero__proof strong {
-  color: var(--mc-ink);
-  font-size: 34px;
-  font-weight: 950;
-  line-height: 0.9;
-}
-
-.mc-hero__proof span {
-  max-width: 220px;
-  color: var(--mc-muted);
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.25;
 }
 
 .mc-hero__visual {
@@ -1215,6 +1007,16 @@ body {
   line-height: 1.55;
 }
 
+.mc-section__intro {
+  display: grid;
+  gap: 10px;
+  max-width: 1020px;
+}
+
+.mc-section__intro p {
+  margin: 0;
+}
+
 .mc-programmes {
   background:
     linear-gradient(180deg, #fff, rgba(255, 247, 223, 0.42)),
@@ -1250,6 +1052,8 @@ body {
   font: inherit;
   font-size: 13px;
   font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
   padding: 10px 12px 10px 40px;
   text-align: left;
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
@@ -2540,10 +2344,6 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .mc-hero__ticker {
-    animation: mcTickerFloat 5.6s ease-in-out infinite;
-  }
-
   .mc-hero__badge,
   .mc-hero__stamp {
     animation: mcBadgeFloat 4.8s ease-in-out infinite;
@@ -2559,17 +2359,6 @@ body {
 
   .mcrown-site .mc-hero__actions .mc-button--primary::before {
     animation: mcHeroConsultShine 3.4s cubic-bezier(0.33, 0, 0.24, 1) infinite;
-  }
-}
-
-@keyframes mcTickerFloat {
-  0%,
-  100% {
-    transform: rotate(4deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(3deg) translateY(-5px);
   }
 }
 
@@ -2649,18 +2438,10 @@ body {
     line-height: 1.46;
   }
 
-  .mc-deadline-note {
-    grid-template-columns: minmax(0, 1fr) minmax(112px, 0.26fr);
-    margin-top: 12px;
-    padding: 13px 14px 13px 17px;
-  }
-
-  .mc-deadline-note__date strong,
   .mc-admissions__deadline strong {
     font-size: 19px;
   }
 
-  .mc-deadline-note__counter strong,
   .mc-admissions__deadline-count strong {
     font-size: 24px;
   }
@@ -2901,7 +2682,6 @@ body {
     display: inline-flex;
   }
 
-  .mc-hero__ticker,
   .mc-hero__script,
   .mc-editorial__rail {
     display: none;
@@ -3060,36 +2840,6 @@ body {
     line-height: 1.5;
   }
 
-  .mc-deadline-note {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    width: 100%;
-    margin-top: 14px;
-    padding: 14px 14px 14px 17px;
-  }
-
-  .mc-deadline-note::after {
-    display: none;
-  }
-
-  .mc-deadline-note p {
-    max-width: none;
-  }
-
-  .mc-deadline-note__counter {
-    grid-column: auto;
-    grid-row: auto;
-    display: flex;
-    min-height: auto;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    border-left: 0;
-    border-top: 1px dashed rgba(55, 39, 28, 0.22);
-    padding: 11px 0 0;
-  }
-
-  .mc-deadline-note__counter small,
   .mc-admissions__deadline-count small {
     max-width: none;
     margin-top: 0;
@@ -3106,14 +2856,6 @@ body {
     padding: 13px 16px;
     min-width: 0;
     overflow-wrap: anywhere;
-  }
-
-  .mc-hero__proof {
-    display: none;
-  }
-
-  .mc-hero__proof strong {
-    font-size: 38px;
   }
 
   .mc-hero__visual {
@@ -3611,23 +3353,19 @@ body {
     line-height: 1.05;
   }
 
-  .mc-deadline-note__date strong,
   .mc-admissions__deadline strong {
     font-size: 18px;
   }
 
-  .mc-deadline-note p,
   .mc-admissions__deadline p {
     font-size: 11px;
     line-height: 1.38;
   }
 
-  .mc-deadline-note__counter strong,
   .mc-admissions__deadline-count strong {
     font-size: 22px;
   }
 
-  .mc-deadline-note__counter,
   .mc-admissions__deadline-count {
     align-items: start;
     flex-direction: column;
