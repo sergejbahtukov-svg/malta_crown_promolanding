@@ -81,7 +81,7 @@
 
     if (daysLeft < 0) {
       counterText = "срок прошел";
-      labelText = "для старта к сентябрю";
+      labelText = "для начала обучения в сентябре";
     }
 
     deadlineCounters.forEach(function (counter) {
@@ -97,7 +97,7 @@
 
   if (heroCarousel) {
     var heroSlides = Array.prototype.slice.call(heroCarousel.querySelectorAll(".mc-hero-carousel__slide"));
-    var heroDots = Array.prototype.slice.call(heroCarousel.querySelectorAll(".mc-hero-carousel__dots span"));
+    var heroDots = Array.prototype.slice.call(heroCarousel.querySelectorAll(".mc-hero-carousel__dots button"));
     var heroCaptionLabel = heroCarousel.querySelector("[data-mcrown-hero-caption-label]");
     var heroCaptionText = heroCarousel.querySelector("[data-mcrown-hero-caption-text]");
     var activeHeroSlide = 0;
@@ -118,7 +118,14 @@
       });
 
       heroDots.forEach(function (dot, index) {
-        dot.classList.toggle("is-active", index === activeHeroSlide);
+        var isActive = index === activeHeroSlide;
+
+        dot.classList.toggle("is-active", isActive);
+        if (isActive) {
+          dot.setAttribute("aria-current", "true");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
       });
 
       if (heroCaptionLabel) {
@@ -144,8 +151,16 @@
 
       heroCarouselTimer = window.setInterval(function () {
         showHeroSlide(activeHeroSlide + 1);
-      }, 4000);
+      }, 5000);
     }
+
+    heroDots.forEach(function (dot, index) {
+      dot.addEventListener("click", function () {
+        stopHeroCarousel();
+        showHeroSlide(index);
+        startHeroCarousel();
+      });
+    });
 
     showHeroSlide(0);
     startHeroCarousel();
@@ -209,7 +224,7 @@
         return;
       }
 
-      status.textContent = "Заявка подготовлена. Подключите обработчик формы в Tilda или CRM.";
+      status.textContent = "Заявка подготовлена. Подключите обработчик формы в конструкторе сайта или CRM.";
       form.reset();
     });
   }
