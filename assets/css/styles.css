@@ -1255,6 +1255,7 @@ body {
 
 .mc-programme-stage {
   display: none;
+  align-items: start;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 16px;
 }
@@ -1266,29 +1267,22 @@ body {
 .mc-programme-card {
   position: relative;
   display: grid;
-  min-height: 246px;
-  align-content: end;
-  gap: 10px;
+  grid-template-rows: auto auto auto auto;
+  min-height: 0;
+  align-content: start;
+  gap: 0;
   overflow: hidden;
   border: 1px solid var(--mc-border);
   border-radius: 20px 20px 20px 5px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 250, 221, 0.78)),
     var(--mc-bg);
-  padding: 24px;
+  padding: 0;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .mc-programme-card::before {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 253, 242, 0.04) 0%, rgba(255, 253, 242, 0.14) 22%, rgba(255, 251, 235, 0.68) 38%, rgba(255, 251, 235, 0.94) 66%, rgba(255, 251, 235, 0.99) 100%),
-    var(--mc-programme-bg) center / cover no-repeat;
-  content: "";
-  filter: saturate(1.08) contrast(1.03);
-  opacity: 0.96;
+  content: none;
 }
 
 .mc-programme-card::after {
@@ -1316,38 +1310,36 @@ body {
 }
 
 .mc-programme-card__photo {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 3;
-  width: min(220px, 35%);
-  height: 132px;
-  border: 7px solid #fff;
-  border-radius: 18px;
-  box-shadow: 0 18px 42px rgba(55, 39, 28, 0.18);
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: clamp(210px, 22vw, 280px);
+  border: 0;
+  border-radius: 19px 19px 0 0;
+  box-shadow: none;
   object-fit: cover;
-  transform: rotate(3deg);
-  transition: transform 260ms ease;
+  transform: none;
+  transition: filter 260ms ease;
 }
 
 .mc-programme-card:hover .mc-programme-card__photo {
-  transform: rotate(2deg) translateY(-3px);
+  filter: saturate(1.04) contrast(1.02);
+  transform: none;
 }
 
 .mc-programme-card--feature {
-  min-height: 290px;
   background:
     linear-gradient(135deg, rgba(255, 243, 230, 0.9), rgba(242, 248, 235, 0.78)),
     repeating-linear-gradient(135deg, rgba(189, 30, 36, 0.06) 0 1px, transparent 1px 18px),
     var(--mc-bg-soft);
 }
 
-.mc-programme-card--feature::before {
-  opacity: 0.96;
+.mc-programme-card--feature .mc-programme-card__photo {
+  height: clamp(230px, 24vw, 300px);
 }
 
 .mc-programme-card--illustrated {
-  min-height: 290px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 223, 0.78)),
     repeating-linear-gradient(135deg, rgba(216, 166, 72, 0.045) 0 1px, transparent 1px 18px),
@@ -1355,13 +1347,13 @@ body {
 }
 
 .mc-programme-card--illustrated .mc-programme-card__photo {
-  width: min(204px, 44%);
-  height: 118px;
-  transform: rotate(-3deg);
+  width: 100%;
+  height: clamp(200px, 21vw, 260px);
+  transform: none;
 }
 
 .mc-programme-card--illustrated:hover .mc-programme-card__photo {
-  transform: rotate(-2deg) translateY(-3px);
+  transform: none;
 }
 
 .mc-programme-card span {
@@ -1378,6 +1370,7 @@ body {
   font-weight: 900;
   letter-spacing: 0.04em;
   line-height: 1.15;
+  margin: 22px 24px 0;
   padding: 5px 9px;
   text-shadow: none;
   text-transform: uppercase;
@@ -1391,13 +1384,14 @@ body {
   font-size: 27px;
   font-weight: 950;
   line-height: 1.12;
+  margin: 10px 24px 0;
 }
 
 .mc-programme-card p {
   position: relative;
   z-index: 2;
-  max-width: 560px;
-  margin: 0;
+  max-width: none;
+  margin: 10px 24px 24px;
   color: var(--mc-muted);
   font-size: 15px;
   line-height: 1.52;
@@ -2611,19 +2605,19 @@ body {
   .mc-programme-card,
   .mc-programme-card--feature,
   .mc-programme-card--illustrated {
-    min-height: 240px;
-    padding: 20px;
+    min-height: 0;
+    padding: 0;
   }
 
   .mc-programme-card__photo {
-    width: min(190px, 34%);
-    height: 98px;
-    border-width: 6px;
+    width: 100%;
+    height: 210px;
+    border-width: 0;
   }
 
   .mc-programme-card--illustrated .mc-programme-card__photo {
-    width: min(182px, 42%);
-    height: 96px;
+    width: 100%;
+    height: 200px;
   }
 
   .mc-programme-card h3 {
@@ -3184,36 +3178,37 @@ body {
 
   .mc-programme-card,
   .mc-programme-card--feature {
-    min-height: 238px;
-    padding: 22px 20px;
+    min-height: 0;
+    padding: 0;
   }
 
   .mc-programme-card::before {
-    inset: 0;
-    opacity: 0.82;
+    content: none;
   }
 
   .mc-programme-card::after {
-    inset: 0;
+    right: 12px;
+    bottom: 10px;
     z-index: 1;
     display: block;
-    background:
-      linear-gradient(180deg, rgba(255, 253, 244, 0.02) 0%, rgba(255, 253, 244, 0.24) 28%, rgba(255, 251, 235, 0.78) 56%, rgba(255, 251, 235, 0.97) 100%),
-      linear-gradient(90deg, rgba(255, 253, 244, 0.58), rgba(255, 253, 244, 0.24) 58%, rgba(255, 253, 244, 0.06));
-    color: transparent;
-    content: "";
+    background: none;
+    color: rgba(55, 39, 28, 0.05);
+    content: "MC";
   }
 
   .mc-programme-card__photo {
-    display: none !important;
+    display: block !important;
+    height: 178px;
   }
 
   .mc-programme-card--illustrated .mc-programme-card__photo {
-    display: none !important;
+    display: block !important;
+    height: 170px;
   }
 
   .mc-programme-card h3 {
     font-size: 24px;
+    margin: 9px 20px 0;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.85);
   }
 
@@ -3221,11 +3216,13 @@ body {
     color: #544942;
     font-size: 14px;
     line-height: 1.45;
+    margin: 8px 20px 20px;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.75);
   }
 
   .mc-programme-card span {
     font-size: 11px;
+    margin: 18px 20px 0;
     padding: 5px 8px;
     text-shadow: none;
   }
@@ -3586,7 +3583,8 @@ body {
 
   .mc-programme-card__photo,
   .mc-programme-card--illustrated .mc-programme-card__photo {
-    display: none !important;
+    display: block !important;
+    height: 156px;
   }
 
   .mc-hero-card--main figcaption {
