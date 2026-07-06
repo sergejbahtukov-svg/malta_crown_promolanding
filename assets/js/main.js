@@ -21,6 +21,48 @@
     window.ym(METRIKA_COUNTER_ID, "reachGoal", goalName, params || {});
   }
 
+  function initCookieNotice() {
+    var storageKey = "mcrown_cookie_notice_accepted";
+    var isAccepted = false;
+
+    try {
+      isAccepted = window.localStorage.getItem(storageKey) === "yes";
+    } catch (error) {
+      isAccepted = false;
+    }
+
+    if (isAccepted) {
+      return;
+    }
+
+    var banner = document.createElement("div");
+    var privacyHref = window.location.pathname.indexOf("privacy.html") !== -1 ? "#policy-title" : "privacy.html";
+
+    banner.className = "mc-cookie";
+    banner.setAttribute("role", "region");
+    banner.setAttribute("aria-label", "Уведомление об использовании cookie");
+    banner.innerHTML = '<p>Мы используем cookie и Яндекс Метрику для аналитики, улучшения сайта и учета рекламных целей.</p><div class="mc-cookie__actions"><a class="mc-cookie__link" href="' + privacyHref + '">Политика обработки данных</a><button class="mc-cookie__button" type="button" data-mcrown-cookie-accept>Понятно</button></div>';
+
+    document.body.appendChild(banner);
+
+    var acceptButton = banner.querySelector("[data-mcrown-cookie-accept]");
+    if (!acceptButton) {
+      return;
+    }
+
+    acceptButton.addEventListener("click", function () {
+      try {
+        window.localStorage.setItem(storageKey, "yes");
+      } catch (error) {
+        // Ignore storage failures; the banner can still be dismissed for this page view.
+      }
+
+      banner.remove();
+    });
+  }
+
+  initCookieNotice();
+
   root.addEventListener("click", function (event) {
     var target = event.target;
     if (!target || typeof target.closest !== "function") {
