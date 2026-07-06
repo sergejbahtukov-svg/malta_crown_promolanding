@@ -54,7 +54,7 @@ jobs:
           mkdir -p "$function_source"
           cp index.py "$function_source/index.py"
 
-          yc --token "$YC_IAM_TOKEN" serverless function version create \
+          yc serverless function version create \
             --function-id=d4ererc6uunkql07t59d \
             --runtime=python312 \
             --entrypoint=index.handler \
