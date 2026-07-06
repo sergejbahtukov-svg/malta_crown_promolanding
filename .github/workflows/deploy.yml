@@ -50,13 +50,17 @@ jobs:
         env:
           YC_IAM_TOKEN: ${{ steps.get-iam-token.outputs.token }}
         run: |
+          function_source="$RUNNER_TEMP/function-source"
+          mkdir -p "$function_source"
+          cp index.py "$function_source/index.py"
+
           yc --token "$YC_IAM_TOKEN" serverless function version create \
             --function-id=d4ererc6uunkql07t59d \
             --runtime=python312 \
             --entrypoint=index.handler \
-            --memory=128m \
+            --memory=128MB \
             --execution-timeout=30s \
-            --source-path=. \
+            --source-path="$function_source" \
             --service-account-id=aje71eak9mopoffe6kar \
             --environment=SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=mskoffice@maltacrown.ru \
             --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_username,environment-variable=SMTP_USERNAME \
