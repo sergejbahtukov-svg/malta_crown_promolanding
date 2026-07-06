@@ -313,6 +313,18 @@ body {
   transform: translateX(3px) skewX(-18deg);
 }
 
+.mc-button:disabled,
+.mc-button[aria-disabled="true"] {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+}
+
+.mc-button:disabled::after,
+.mc-button[aria-disabled="true"]::after {
+  transform: none;
+}
+
 .mcrown-site .mc-button--primary {
   border-color: var(--mc-red);
   background: var(--mc-red);

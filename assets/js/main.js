@@ -249,8 +249,65 @@
   var status = root.querySelector("[data-mcrown-form-status]");
 
   if (form && status) {
+    var formEndpoint = form.getAttribute("data-mcrown-form-endpoint");
+    var submitButton = form.querySelector('[type="submit"]');
+    var submitButtonText = submitButton ? submitButton.textContent : "";
+    var isFormSubmitting = false;
+
+    function setFormSubmitting(isSubmitting) {
+      isFormSubmitting = isSubmitting;
+      form.classList.toggle("is-sending", isSubmitting);
+
+      if (!submitButton) {
+        return;
+      }
+
+      submitButton.disabled = isSubmitting;
+      submitButton.textContent = isSubmitting ? "Отправляем..." : submitButtonText;
+    }
+
+    function addTrackingParams(payload) {
+      if (typeof URLSearchParams !== "function") {
+        return;
+      }
+
+      var searchParams = new URLSearchParams(window.location.search);
+      [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "yclid"
+      ].forEach(function (paramName) {
+        var value = searchParams.get(paramName);
+        if (value) {
+          payload[paramName] = value;
+        }
+      });
+    }
+
+    function buildFormPayload() {
+      var payload = {};
+      var formData = new FormData(form);
+
+      formData.forEach(function (value, key) {
+        payload[key] = typeof value === "string" ? value.trim() : value;
+      });
+
+      payload.page = window.location.href;
+      payload.referrer = document.referrer || "";
+      addTrackingParams(payload);
+
+      return payload;
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+
+      if (isFormSubmitting) {
+        return;
+      }
 
       if (!form.checkValidity()) {
         status.textContent = "Проверьте обязательные поля перед отправкой.";
@@ -258,13 +315,42 @@
         return;
       }
 
-      reachGoal(METRIKA_GOALS.formSubmit, {
-        form: "admissions",
-        page: window.location.pathname
-      });
+      if (!formEndpoint || typeof window.fetch !== "function") {
+        status.textContent = "Не удалось отправить заявку. Пожалуйста, позвоните или напишите нам на email.";
+        return;
+      }
 
-      status.textContent = "Заявка подготовлена. Подключите обработчик формы в конструкторе сайта или CRM.";
-      form.reset();
+      setFormSubmitting(true);
+      status.textContent = "Отправляем заявку...";
+
+      window.fetch(formEndpoint, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(buildFormPayload())
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Form request failed");
+          }
+        })
+        .then(function () {
+          reachGoal(METRIKA_GOALS.formSubmit, {
+            form: "admissions",
+            page: window.location.pathname
+          });
+
+          status.textContent = "Спасибо! Заявка отправлена. Мы свяжемся с вами в ближайшее время.";
+          form.reset();
+        })
+        .catch(function () {
+          status.textContent = "Не удалось отправить заявку. Пожалуйста, позвоните или напишите нам на email.";
+        })
+        .then(function () {
+          setFormSubmitting(false);
+        });
     });
   }
 })();

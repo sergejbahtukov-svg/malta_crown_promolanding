@@ -364,7 +364,7 @@
               </div>
             </div>
 
-            <form class="mc-form" data-mcrown-form novalidate>
+            <form class="mc-form" data-mcrown-form data-mcrown-form-endpoint="https://functions.yandexcloud.net/d4ererc6uunkql07t59d" novalidate>
               <label>
                 <span>Ваше имя</span>
                 <input type="text" name="name" autocomplete="name" required>
@@ -392,7 +392,7 @@
                 <textarea name="message" rows="4" placeholder="Например: интересует обучение с проживанием, IGCSE или подготовка к вузу"></textarea>
               </label>
               <label class="mc-consent mc-form__wide">
-                <input type="checkbox" required checked>
+                <input type="checkbox" name="consent" value="accepted" required checked>
                 <span>Я согласен на обработку персональных данных и ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой обработки данных</a>.</span>
               </label>
               <button class="mc-button mc-button--primary mc-form__wide" type="submit">Отправить заявку</button>
@@ -471,6 +471,6 @@
       </footer>
     </div>
 
-    <script src="assets/js/main.js?v=20260706-goals"></script>
+    <script src="assets/js/main.js?v=20260706-form"></script>
   </body>
 </html>
