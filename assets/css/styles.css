@@ -75,7 +75,7 @@ body {
 
 .mc-header__inner {
   display: grid;
-  grid-template-columns: 270px 1fr 216px;
+  grid-template-columns: 270px minmax(0, 1fr) auto;
   align-items: center;
   gap: 18px;
   min-height: 82px;
@@ -171,11 +171,18 @@ body {
   outline: none;
 }
 
+.mc-header__contacts {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .mc-header__phone {
   position: relative;
-  justify-self: end;
   display: inline-flex;
-  width: 216px;
+  width: 186px;
   min-height: 46px;
   align-items: center;
   justify-content: center;
@@ -193,7 +200,7 @@ body {
   line-height: 1.16;
   padding: 0 12px;
   text-align: center;
-  white-space: normal;
+  white-space: nowrap;
   box-shadow:
     0 14px 34px rgba(55, 39, 28, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.86);
@@ -247,6 +254,91 @@ body {
 .mc-header__phone:focus-visible::after {
   transform: translateX(74%) rotate(4deg);
   transition: transform 620ms ease;
+}
+
+.mc-header__messengers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-header__messenger {
+  position: relative;
+  display: inline-flex;
+  width: 70px;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(216, 166, 72, 0.42);
+  border-radius: 14px 14px 14px 4px;
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 229, 166, 0.62), transparent 28%),
+    linear-gradient(135deg, #fff, rgba(255, 247, 223, 0.86) 58%, rgba(216, 166, 72, 0.15));
+  color: var(--mc-brown);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  padding: 0 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    0 8px 18px rgba(55, 39, 28, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  transition: border-color 180ms ease, box-shadow 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.mc-header__messenger--wa {
+  width: 46px;
+  padding: 0;
+}
+
+.mc-header__messenger-icon {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.mc-header__messenger-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mc-header__messenger--max .mc-header__messenger-icon {
+  color: #111;
+}
+
+.mc-header__messenger--wa .mc-header__messenger-icon {
+  width: 24px;
+  height: 24px;
+  color: #25d366;
+}
+
+.mc-header__messenger-label {
+  position: relative;
+  z-index: 1;
+}
+
+.mc-header__messenger--wa .mc-header__messenger-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.mc-header__messenger:hover,
+.mc-header__messenger:focus-visible {
+  border-color: rgba(189, 30, 36, 0.42);
+  color: var(--mc-red-dark);
+  outline: none;
+  transform: translateY(-1px);
 }
 
 .mc-menu-button {
@@ -2388,6 +2480,68 @@ body {
   outline: none;
 }
 
+.mc-footer__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.mc-footer .mc-footer__social {
+  display: inline-flex;
+  width: auto;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0;
+  border: 1px solid rgba(216, 166, 72, 0.34);
+  border-radius: 13px 13px 13px 4px;
+  background: rgba(255, 253, 242, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0 12px;
+  text-transform: uppercase;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.mc-footer__social-icon {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+}
+
+.mc-footer__social-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.mc-footer__social--wa .mc-footer__social-icon {
+  background: #25d366;
+  color: #fff;
+}
+
+.mc-footer__social--wa .mc-footer__social-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.mc-footer .mc-footer__social:hover,
+.mc-footer .mc-footer__social:focus-visible {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 253, 242, 0.14);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
 .mc-policy {
   background:
     repeating-linear-gradient(135deg, rgba(10, 31, 86, 0.026) 0 1px, transparent 1px 20px),
@@ -2909,7 +3063,7 @@ body {
     min-height: 74px;
   }
 
-  .mc-header__phone {
+  .mc-header__contacts {
     display: none;
   }
 
