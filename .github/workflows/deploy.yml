@@ -62,7 +62,7 @@ jobs:
             --memory=128MB \
             --execution-timeout=30s \
             --source-path="$function_source" \
-            --service-account-id=aje71eak9mopoffe6kar \
+            --service-account-id=ajet2vjo0tsv19opo4ci \
             --environment=SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=mskoffice@maltacrown.ru \
             --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_username,environment-variable=SMTP_USERNAME \
             --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_password,environment-variable=SMTP_PASSWORD 2>&1 | tee "$RUNNER_TEMP/yc-deploy.log"
