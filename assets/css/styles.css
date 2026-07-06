@@ -2480,6 +2480,10 @@ body {
   outline: none;
 }
 
+.mc-footer__official {
+  font-weight: 850;
+}
+
 .mc-footer__socials {
   display: flex;
   flex-wrap: wrap;
