@@ -75,7 +75,7 @@ body {
 
 .mc-header__inner {
   display: grid;
-  grid-template-columns: 270px 1fr 178px;
+  grid-template-columns: 270px 1fr 216px;
   align-items: center;
   gap: 18px;
   min-height: 82px;
@@ -175,7 +175,7 @@ body {
   position: relative;
   justify-self: end;
   display: inline-flex;
-  width: 178px;
+  width: 216px;
   min-height: 46px;
   align-items: center;
   justify-content: center;
@@ -190,8 +190,10 @@ body {
   font-size: 12px;
   font-weight: 950;
   letter-spacing: 0.02em;
+  line-height: 1.16;
   padding: 0 12px;
-  white-space: nowrap;
+  text-align: center;
+  white-space: normal;
   box-shadow:
     0 14px 34px rgba(55, 39, 28, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.86);
@@ -819,6 +821,10 @@ body {
   object-position: center 46%;
 }
 
+.mc-hero-carousel__slide:nth-child(5) img {
+  object-position: center center;
+}
+
 .mc-hero-card--main figcaption {
   position: absolute;
   right: 22px;
@@ -839,6 +845,7 @@ body {
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.08em;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -2340,6 +2347,13 @@ body {
   margin-bottom: 13px;
   font-style: normal;
   line-height: 1.6;
+}
+
+.mc-footer__office {
+  max-width: 360px;
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 14px;
 }
 
 .mc-footer a {
