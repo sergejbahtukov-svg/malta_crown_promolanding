@@ -54,6 +54,7 @@ jobs:
           mkdir -p "$function_source"
           cp index.py "$function_source/index.py"
 
+          set +e
           yc serverless function version create \
             --function-id=d4ererc6uunkql07t59d \
             --runtime=python312 \
@@ -64,4 +65,11 @@ jobs:
             --service-account-id=aje71eak9mopoffe6kar \
             --environment=SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=mskoffice@maltacrown.ru \
             --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_username,environment-variable=SMTP_USERNAME \
-            --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_password,environment-variable=SMTP_PASSWORD
+            --secret=id=e6qj62vjpmqtniokmnrt,key=smtp_password,environment-variable=SMTP_PASSWORD 2>&1 | tee "$RUNNER_TEMP/yc-deploy.log"
+
+          status="${PIPESTATUS[0]}"
+          if [ "$status" -ne 0 ]; then
+            message="$(tail -n 40 "$RUNNER_TEMP/yc-deploy.log" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')"
+            echo "::error title=Yandex Cloud function deploy failed::$message"
+            exit "$status"
+          fi
