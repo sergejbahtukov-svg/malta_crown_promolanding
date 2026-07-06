@@ -1266,31 +1266,29 @@ body {
 .mc-programme-card {
   position: relative;
   display: grid;
-  grid-template-rows: var(--mc-programme-media-height, 190px) auto auto;
-  min-height: 0;
-  align-content: stretch;
-  gap: 0;
+  min-height: 246px;
+  align-content: end;
+  gap: 10px;
   overflow: hidden;
   border: 1px solid var(--mc-border);
   border-radius: 20px 20px 20px 5px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 250, 221, 0.78)),
     var(--mc-bg);
-  padding: 0;
+  padding: 24px;
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .mc-programme-card::before {
   position: absolute;
-  inset: 0 0 auto;
-  height: var(--mc-programme-media-height, 190px);
+  inset: 0;
   z-index: 0;
   background:
-    linear-gradient(180deg, rgba(18, 15, 10, 0.05), rgba(18, 15, 10, 0.12)),
+    linear-gradient(180deg, rgba(255, 253, 242, 0.04) 0%, rgba(255, 253, 242, 0.14) 22%, rgba(255, 251, 235, 0.68) 38%, rgba(255, 251, 235, 0.94) 66%, rgba(255, 251, 235, 0.99) 100%),
     var(--mc-programme-bg) center / cover no-repeat;
   content: "";
   filter: saturate(1.08) contrast(1.03);
-  opacity: 0.9;
+  opacity: 0.96;
 }
 
 .mc-programme-card::after {
@@ -1337,8 +1335,7 @@ body {
 }
 
 .mc-programme-card--feature {
-  --mc-programme-media-height: 210px;
-  min-height: 0;
+  min-height: 290px;
   background:
     linear-gradient(135deg, rgba(255, 243, 230, 0.9), rgba(242, 248, 235, 0.78)),
     repeating-linear-gradient(135deg, rgba(189, 30, 36, 0.06) 0 1px, transparent 1px 18px),
@@ -1346,12 +1343,11 @@ body {
 }
 
 .mc-programme-card--feature::before {
-  opacity: 0.92;
+  opacity: 0.96;
 }
 
 .mc-programme-card--illustrated {
-  --mc-programme-media-height: 190px;
-  min-height: 0;
+  min-height: 290px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 223, 0.78)),
     repeating-linear-gradient(135deg, rgba(216, 166, 72, 0.045) 0 1px, transparent 1px 18px),
@@ -1372,8 +1368,6 @@ body {
   position: relative;
   z-index: 2;
   display: inline-flex;
-  grid-row: 1;
-  align-self: end;
   width: fit-content;
   max-width: 100%;
   border: 1px solid rgba(189, 30, 36, 0.16);
@@ -1384,7 +1378,6 @@ body {
   font-weight: 900;
   letter-spacing: 0.04em;
   line-height: 1.15;
-  margin: 0 24px 20px;
   padding: 5px 9px;
   text-shadow: none;
   text-transform: uppercase;
@@ -1393,27 +1386,21 @@ body {
 .mc-programme-card h3 {
   position: relative;
   z-index: 2;
-  grid-row: 2;
   margin: 0;
-  background: rgba(255, 253, 242, 0.97);
   color: var(--mc-ink);
   font-size: 27px;
   font-weight: 950;
   line-height: 1.12;
-  padding: 24px 24px 2px;
 }
 
 .mc-programme-card p {
   position: relative;
   z-index: 2;
-  grid-row: 3;
-  max-width: none;
+  max-width: 560px;
   margin: 0;
-  background: rgba(255, 253, 242, 0.97);
   color: var(--mc-muted);
   font-size: 15px;
   line-height: 1.52;
-  padding: 8px 24px 24px;
 }
 
 .mc-editorial {
@@ -3197,25 +3184,24 @@ body {
 
   .mc-programme-card,
   .mc-programme-card--feature {
-    --mc-programme-media-height: 156px;
-    min-height: 0;
-    padding: 0;
+    min-height: 238px;
+    padding: 22px 20px;
   }
 
   .mc-programme-card::before {
-    inset: 0 0 auto;
-    height: var(--mc-programme-media-height, 156px);
-    opacity: 0.88;
+    inset: 0;
+    opacity: 0.82;
   }
 
   .mc-programme-card::after {
-    right: 12px;
-    bottom: 10px;
+    inset: 0;
     z-index: 1;
     display: block;
-    background: none;
-    color: rgba(55, 39, 28, 0.05);
-    content: "MC";
+    background:
+      linear-gradient(180deg, rgba(255, 253, 244, 0.02) 0%, rgba(255, 253, 244, 0.24) 28%, rgba(255, 251, 235, 0.78) 56%, rgba(255, 251, 235, 0.97) 100%),
+      linear-gradient(90deg, rgba(255, 253, 244, 0.58), rgba(255, 253, 244, 0.24) 58%, rgba(255, 253, 244, 0.06));
+    color: transparent;
+    content: "";
   }
 
   .mc-programme-card__photo {
@@ -3228,7 +3214,6 @@ body {
 
   .mc-programme-card h3 {
     font-size: 24px;
-    padding: 20px 20px 2px;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.85);
   }
 
@@ -3236,13 +3221,11 @@ body {
     color: #544942;
     font-size: 14px;
     line-height: 1.45;
-    padding: 7px 20px 20px;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.75);
   }
 
   .mc-programme-card span {
     font-size: 11px;
-    margin: 0 20px 16px;
     padding: 5px 8px;
     text-shadow: none;
   }
