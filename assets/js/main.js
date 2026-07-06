@@ -6,6 +6,40 @@
     return;
   }
 
+  var METRIKA_COUNTER_ID = 110442062;
+  var METRIKA_GOALS = {
+    phoneClick: "phone_click",
+    emailClick: "email_click",
+    formSubmit: "lead_form_submit"
+  };
+
+  function reachGoal(goalName, params) {
+    if (typeof window.ym !== "function") {
+      return;
+    }
+
+    window.ym(METRIKA_COUNTER_ID, "reachGoal", goalName, params || {});
+  }
+
+  root.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target || typeof target.closest !== "function") {
+      return;
+    }
+
+    var link = target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    if (!link || !root.contains(link)) {
+      return;
+    }
+
+    var href = link.getAttribute("href") || "";
+    var isPhoneClick = href.indexOf("tel:") === 0;
+
+    reachGoal(isPhoneClick ? METRIKA_GOALS.phoneClick : METRIKA_GOALS.emailClick, {
+      page: window.location.pathname
+    });
+  });
+
   var menuButton = root.querySelector("[data-mcrown-menu]");
   var nav = root.querySelector("[data-mcrown-nav]");
 
@@ -223,6 +257,11 @@
         form.reportValidity();
         return;
       }
+
+      reachGoal(METRIKA_GOALS.formSubmit, {
+        form: "admissions",
+        page: window.location.pathname
+      });
 
       status.textContent = "Заявка подготовлена. Подключите обработчик формы в конструкторе сайта или CRM.";
       form.reset();
