@@ -1029,15 +1029,17 @@ body {
   position: relative;
   overflow: hidden;
   display: grid;
-  gap: 6px;
-  min-height: 116px;
-  align-content: center;
+  grid-template-columns: 62px minmax(0, 1fr);
+  grid-template-rows: 44px auto;
+  gap: 0 18px;
+  min-height: 132px;
+  align-content: start;
   border: 1px solid rgba(55, 39, 28, 0.14);
   border-radius: 18px 18px 18px 4px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 247, 223, 0.58)),
     repeating-linear-gradient(90deg, rgba(31, 111, 122, 0.06) 0 1px, transparent 1px 18px);
-  padding: 22px 20px 20px 88px;
+  padding: 22px 20px 20px 28px;
   box-shadow: 0 18px 42px rgba(55, 39, 28, 0.07);
   transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
@@ -1058,12 +1060,14 @@ body {
 }
 
 .mc-trust__badge {
-  position: absolute;
-  left: 20px;
-  top: 21px;
+  position: relative;
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: start;
+  justify-self: start;
   z-index: 1;
-  width: 52px;
-  height: 52px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   filter: drop-shadow(0 10px 14px rgba(189, 30, 36, 0.12));
 }
@@ -1077,17 +1081,29 @@ body {
 }
 
 .mc-trust span {
+  display: flex;
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-start;
+  min-width: 0;
   color: var(--mc-red);
   font-family: var(--mc-font-serif);
   font-size: 27px;
   font-style: italic;
-  line-height: 1;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
 }
 
 .mc-trust strong {
+  display: block;
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
   color: var(--mc-brown);
   font-size: 14px;
   font-weight: 900;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .mc-section {
@@ -1173,9 +1189,9 @@ body {
 .mc-programme-tabs button {
   position: relative;
   display: grid;
-  min-height: 58px;
+  min-height: 66px;
   align-content: center;
-  gap: 4px;
+  gap: 6px;
   border: 0;
   border-radius: 14px 14px 14px 4px;
   background: transparent;
@@ -1206,12 +1222,12 @@ body {
 
 .mc-programme-tabs button::after {
   display: block;
-  color: var(--mc-sea);
+  color: #0f7580;
   content: attr(data-track);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 950;
-  letter-spacing: 0.12em;
-  line-height: 1.1;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
   text-transform: uppercase;
 }
 
@@ -1234,7 +1250,7 @@ body {
 .mc-programme-tabs button:hover::after,
 .mc-programme-tabs button:focus-visible::after,
 .mc-programme-tabs button.is-active::after {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffe5a6;
 }
 
 .mc-programme-stage {
@@ -1352,10 +1368,19 @@ body {
 .mc-programme-card span {
   position: relative;
   z-index: 2;
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid rgba(189, 30, 36, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 253, 242, 0.92);
   color: var(--mc-red);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  padding: 5px 9px;
+  text-shadow: none;
   text-transform: uppercase;
 }
 
@@ -1366,7 +1391,7 @@ body {
   color: var(--mc-ink);
   font-size: 27px;
   font-weight: 950;
-  line-height: 1.05;
+  line-height: 1.12;
 }
 
 .mc-programme-card p {
@@ -3075,16 +3100,17 @@ body {
   }
 
   .mc-trust article {
-    min-height: 138px;
-    align-content: end;
+    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-rows: 44px auto;
+    gap: 0 10px;
+    min-height: 150px;
+    align-content: start;
     padding: 16px 12px 14px;
   }
 
   .mc-trust__badge {
-    position: static;
     width: 40px;
     height: 40px;
-    margin-bottom: 8px;
   }
 
   .mc-trust span {
@@ -3132,9 +3158,9 @@ body {
   }
 
   .mc-programme-tabs button {
-    min-height: 54px;
+    min-height: 64px;
     border-radius: 14px 14px 14px 4px;
-    font-size: 10px;
+    font-size: 11px;
     line-height: 1.15;
     padding: 10px 8px 10px 32px;
     min-width: 0;
@@ -3148,7 +3174,8 @@ body {
   }
 
   .mc-programme-tabs button::after {
-    font-size: 7px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
   }
 
   .mc-programme-stage,
@@ -3200,7 +3227,9 @@ body {
   }
 
   .mc-programme-card span {
-    text-shadow: 0 1px 0 rgba(255, 253, 244, 0.8);
+    font-size: 11px;
+    padding: 5px 8px;
+    text-shadow: none;
   }
 
   .mc-editorial__grid {
@@ -3533,7 +3562,7 @@ body {
   }
 
   .mc-trust__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .mc-programme-tabs {
@@ -3542,7 +3571,7 @@ body {
   }
 
   .mc-programme-tabs button {
-    min-height: 48px;
+    min-height: 64px;
     font-size: 10px;
     padding: 8px 8px 8px 28px;
   }
@@ -3552,7 +3581,9 @@ body {
   }
 
   .mc-programme-tabs button::after {
-    display: none;
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.03em;
   }
 
   .mc-programme-card__photo,
