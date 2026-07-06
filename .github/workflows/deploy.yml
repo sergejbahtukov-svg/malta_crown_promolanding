@@ -4,6 +4,10 @@ on:
   push:
     branches: [main, master]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -36,25 +40,17 @@ jobs:
           curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$RUNNER_TEMP/yandex-cloud" -n
           echo "$RUNNER_TEMP/yandex-cloud/bin" >> "$GITHUB_PATH"
 
-      - name: Configure Yandex Cloud CLI
-        env:
-          YC_SERVICE_ACCOUNT_KEY_JSON: ${{ secrets.YC_SERVICE_ACCOUNT_KEY_JSON }}
-          YC_TOKEN: ${{ secrets.YC_TOKEN }}
-        run: |
-          if [ -n "$YC_SERVICE_ACCOUNT_KEY_JSON" ]; then
-            key_file="$RUNNER_TEMP/yc-key.json"
-            printf '%s' "$YC_SERVICE_ACCOUNT_KEY_JSON" > "$key_file"
-            yc config set service-account-key "$key_file"
-          elif [ -n "$YC_TOKEN" ]; then
-            yc config set token "$YC_TOKEN"
-          else
-            echo "::error::Add YC_SERVICE_ACCOUNT_KEY_JSON or YC_TOKEN repository secret to deploy the serverless function."
-            exit 1
-          fi
+      - name: Get Yandex Cloud IAM token
+        id: get-iam-token
+        uses: docker://ghcr.io/yc-actions/yc-iam-token-fed:1.0.0
+        with:
+          yc-sa-id: ajet2vjo0tsv19opo4ci
 
       - name: Deploy Yandex Cloud Function
+        env:
+          YC_IAM_TOKEN: ${{ steps.get-iam-token.outputs.token }}
         run: |
-          yc serverless function version create \
+          yc --token "$YC_IAM_TOKEN" serverless function version create \
             --function-id=d4ererc6uunkql07t59d \
             --runtime=python312 \
             --entrypoint=index.handler \
