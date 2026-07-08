@@ -10,6 +10,8 @@
   var METRIKA_GOALS = {
     phoneClick: "phone_click",
     emailClick: "email_click",
+    whatsappClick: "whatsapp_click",
+    maxClick: "max_click",
     formSubmit: "lead_form_submit"
   };
 
@@ -69,16 +71,32 @@
       return;
     }
 
-    var link = target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    var link = target.closest("a[href]");
     if (!link || !root.contains(link)) {
       return;
     }
 
     var href = link.getAttribute("href") || "";
-    var isPhoneClick = href.indexOf("tel:") === 0;
+    var normalizedHref = href.toLowerCase();
+    var goalName = "";
 
-    reachGoal(isPhoneClick ? METRIKA_GOALS.phoneClick : METRIKA_GOALS.emailClick, {
-      page: window.location.pathname
+    if (normalizedHref.indexOf("tel:") === 0) {
+      goalName = METRIKA_GOALS.phoneClick;
+    } else if (normalizedHref.indexOf("mailto:") === 0) {
+      goalName = METRIKA_GOALS.emailClick;
+    } else if (normalizedHref.indexOf("wa.me/") !== -1 || normalizedHref.indexOf("whatsapp.com/") !== -1) {
+      goalName = METRIKA_GOALS.whatsappClick;
+    } else if (normalizedHref.indexOf("max.ru") !== -1) {
+      goalName = METRIKA_GOALS.maxClick;
+    }
+
+    if (!goalName) {
+      return;
+    }
+
+    reachGoal(goalName, {
+      page: window.location.pathname,
+      href: href
     });
   });
 
@@ -153,7 +171,7 @@
     }
 
     var counterText = daysLeft > 0 ? daysLeft + " " + pluralizeDays(daysLeft) : "сегодня";
-    var labelText = daysLeft > 0 ? "до безопасного срока" : "последний день подачи";
+    var labelText = daysLeft > 0 ? "осталось до 31 июля" : "последний день подачи";
 
     if (daysLeft < 0) {
       counterText = "срок прошел";
