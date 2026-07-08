@@ -3370,9 +3370,9 @@ body {
     grid-template-columns: 44px minmax(0, 1fr);
     grid-template-rows: 44px auto;
     gap: 0 10px;
-    min-height: 150px;
+    min-height: 112px;
     align-content: start;
-    padding: 16px 12px 14px;
+    padding: 14px 12px 13px 16px;
   }
 
   .mc-trust__badge {
@@ -3834,6 +3834,43 @@ body {
 
   .mc-trust__grid {
     grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .mc-trust {
+    padding-bottom: 30px;
+  }
+
+  .mc-trust article {
+    grid-template-columns: 42px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1px 9px;
+    min-height: 72px;
+    align-content: center;
+    padding: 10px 12px 10px 17px;
+    border-radius: 14px 14px 14px 4px;
+    box-shadow: 0 10px 24px rgba(55, 39, 28, 0.055);
+  }
+
+  .mc-trust article::after {
+    width: 5px;
+  }
+
+  .mc-trust__badge {
+    width: 34px;
+    height: 34px;
+    align-self: center;
+  }
+
+  .mc-trust span {
+    align-items: center;
+    font-size: 21px;
+    line-height: 1;
+  }
+
+  .mc-trust strong {
+    font-size: 11px;
+    line-height: 1.15;
   }
 
   .mc-programme-tabs {
