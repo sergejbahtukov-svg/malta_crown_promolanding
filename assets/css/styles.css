@@ -342,24 +342,74 @@ body {
 }
 
 .mc-menu-button {
+  position: relative;
   display: none;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 5px;
   border: 1px solid var(--mc-line);
   border-radius: 50%;
   background: var(--mc-brown);
   color: #fff;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.mc-menu-button:hover,
+.mc-menu-button:focus-visible {
+  background: var(--mc-brown-2);
+  box-shadow: 0 10px 24px rgba(55, 39, 28, 0.18);
+}
+
+.mc-menu-button:focus-visible {
+  outline: 2px solid rgba(189, 30, 36, 0.42);
+  outline-offset: 3px;
+}
+
+.mc-menu-button:active {
+  transform: scale(0.96);
 }
 
 .mc-menu-button span {
-  width: 17px;
+  position: absolute;
+  left: 50%;
+  width: 22px;
   height: 2px;
+  border-radius: 999px;
   background: currentColor;
+  transform: translate(-50%, var(--mc-menu-line-y)) rotate(0deg);
+  transform-origin: center;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease;
+}
+
+.mc-menu-button span:nth-child(1) {
+  --mc-menu-line-y: -7px;
+}
+
+.mc-menu-button span:nth-child(2) {
+  --mc-menu-line-y: 0px;
+}
+
+.mc-menu-button span:nth-child(3) {
+  --mc-menu-line-y: 7px;
+}
+
+.mc-menu-button.is-open span:nth-child(1),
+.mc-menu-button[aria-expanded="true"] span:nth-child(1) {
+  transform: translate(-50%, 0) rotate(45deg);
+}
+
+.mc-menu-button.is-open span:nth-child(2),
+.mc-menu-button[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+  transform: translate(-50%, 0) scaleX(0.35);
+}
+
+.mc-menu-button.is-open span:nth-child(3),
+.mc-menu-button[aria-expanded="true"] span:nth-child(3) {
+  transform: translate(-50%, 0) rotate(-45deg);
 }
 
 .mc-button {
@@ -2656,6 +2706,14 @@ body {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .mc-menu-button,
+  .mc-menu-button span,
+  .mc-nav {
+    transition: none;
+  }
+}
+
 @keyframes mcBadgeFloat {
   0%,
   100% {
@@ -2957,19 +3015,29 @@ body {
   .mc-nav {
     position: fixed;
     inset: 82px 20px auto;
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-self: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top right;
     border-radius: 18px 18px 18px 4px;
     background:
       linear-gradient(135deg, #fff, rgba(255, 247, 223, 0.86));
     box-shadow: var(--mc-shadow);
     padding: 10px;
+    transition: opacity 220ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 260ms;
   }
 
   .mc-nav.is-open {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    transition-delay: 0s;
   }
 
   .mc-nav a {

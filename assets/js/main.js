@@ -109,6 +109,7 @@
     }
 
     nav.classList.remove("is-open");
+    menuButton.classList.remove("is-open");
     menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute("aria-label", "Открыть меню");
   }
@@ -116,6 +117,7 @@
   if (menuButton && nav) {
     menuButton.addEventListener("click", function () {
       var isOpen = nav.classList.toggle("is-open");
+      menuButton.classList.toggle("is-open", isOpen);
       menuButton.setAttribute("aria-expanded", String(isOpen));
       menuButton.setAttribute("aria-label", isOpen ? "Закрыть меню" : "Открыть меню");
     });
@@ -124,6 +126,15 @@
       if (event.target.tagName === "A") {
         closeMenu();
       }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !nav.classList.contains("is-open")) {
+        return;
+      }
+
+      closeMenu();
+      menuButton.focus();
     });
   }
 
