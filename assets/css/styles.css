@@ -819,11 +819,31 @@ body {
 .mc-hero__lead--expanded {
   display: grid;
   max-width: 650px;
-  gap: 10px;
+  gap: 8px;
 }
 
 .mc-hero__lead--expanded p {
+  position: relative;
   margin: 0;
+  border: 1px solid rgba(216, 166, 72, 0.18);
+  border-radius: 8px 8px 8px 3px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 247, 223, 0.66)),
+    rgba(255, 253, 242, 0.84);
+  color: var(--mc-text);
+  padding: 11px 14px 11px 18px;
+  box-shadow: 0 12px 28px rgba(55, 39, 28, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.mc-hero__lead--expanded p::before {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(189, 30, 36, 0.46), rgba(216, 166, 72, 0.72));
+  content: "";
 }
 
 .mc-admissions__deadline span {
@@ -3221,6 +3241,21 @@ body {
     margin-top: 0;
     font-size: 14px;
     line-height: 1.5;
+  }
+
+  .mc-hero__lead--expanded {
+    gap: 7px;
+  }
+
+  .mc-hero__lead--expanded p {
+    padding: 10px 12px 10px 16px;
+    box-shadow: 0 10px 20px rgba(55, 39, 28, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  }
+
+  .mc-hero__lead--expanded p::before {
+    left: 7px;
+    top: 11px;
+    bottom: 11px;
   }
 
   .mc-admissions__deadline-count small {
