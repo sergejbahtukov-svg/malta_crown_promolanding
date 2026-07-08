@@ -1333,6 +1333,58 @@ body {
     var(--mc-surface);
 }
 
+.mc-programmes .mc-section__head {
+  max-width: 1120px;
+  margin-bottom: 24px;
+}
+
+.mc-programmes .mc-section__intro {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-width: none;
+}
+
+.mc-programmes .mc-section__intro p {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
+  border: 1px solid rgba(216, 166, 72, 0.22);
+  border-radius: 18px 18px 18px 5px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 247, 223, 0.86)),
+    repeating-linear-gradient(90deg, rgba(55, 39, 28, 0.045) 0 1px, transparent 1px 24px);
+  color: #4a403a;
+  font-size: 16px;
+  line-height: 1.62;
+  padding: 17px 18px 17px 25px;
+  box-shadow:
+    0 16px 40px rgba(55, 39, 28, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.mc-programmes .mc-section__intro p::before {
+  position: absolute;
+  left: 11px;
+  top: 16px;
+  bottom: 16px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(189, 30, 36, 0.72), rgba(216, 166, 72, 0.76));
+  content: "";
+}
+
+.mc-programmes .mc-section__intro p:nth-child(2)::before {
+  background: linear-gradient(180deg, rgba(31, 111, 122, 0.74), rgba(216, 166, 72, 0.64));
+}
+
+.mc-programmes .mc-section__intro p:nth-child(3)::before {
+  background: linear-gradient(180deg, rgba(10, 31, 86, 0.72), rgba(189, 30, 36, 0.62));
+}
+
+.mc-programmes .mc-section__intro p:nth-child(4)::before {
+  background: linear-gradient(180deg, rgba(216, 166, 72, 0.9), rgba(55, 39, 28, 0.54));
+}
+
 .mc-programme-tabs {
   position: relative;
   display: grid;
@@ -3416,6 +3468,32 @@ body {
     line-height: 1.58;
   }
 
+  .mc-programmes .mc-section__head {
+    margin-bottom: 16px;
+  }
+
+  .mc-programmes .mc-section__intro {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .mc-programmes .mc-section__intro p {
+    border-radius: 15px 15px 15px 4px;
+    font-size: 15px;
+    line-height: 1.52;
+    padding: 13px 13px 13px 21px;
+    box-shadow:
+      0 10px 24px rgba(55, 39, 28, 0.065),
+      inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  }
+
+  .mc-programmes .mc-section__intro p::before {
+    left: 9px;
+    top: 13px;
+    bottom: 13px;
+    width: 3px;
+  }
+
   .mc-programme-tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3915,6 +3993,26 @@ body {
   .mc-faq h2,
   .mc-editorial h2 {
     font-size: 27px;
+  }
+
+  .mc-programmes .mc-section__head {
+    gap: 10px;
+  }
+
+  .mc-programmes .mc-section__intro {
+    gap: 7px;
+  }
+
+  .mc-programmes .mc-section__intro p {
+    font-size: 14px;
+    line-height: 1.48;
+    padding: 12px 12px 12px 19px;
+  }
+
+  .mc-programmes .mc-section__intro p::before {
+    left: 8px;
+    top: 12px;
+    bottom: 12px;
   }
 
   .mc-malta h2 {
