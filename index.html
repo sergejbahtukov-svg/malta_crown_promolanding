@@ -183,74 +183,97 @@
               </div>
             </div>
 
-            <div class="mc-programme-tabs" role="tablist" aria-label="Программы Malta Crown">
-              <button class="is-active" type="button" role="tab" aria-selected="true" data-mcrown-tab="primary" data-track="Year 1-6">Начальная школа</button>
-              <button type="button" role="tab" aria-selected="false" data-mcrown-tab="secondary" data-track="Year 7-11, Year 12-13">Средняя и старшая школы</button>
-              <button type="button" role="tab" aria-selected="false" data-mcrown-tab="senior" data-track="Путь в университет">Путь в университет</button>
-              <button type="button" role="tab" aria-selected="false" data-mcrown-tab="short" data-track="Вводный курс и поддержка">Вводные программы и поддержка</button>
-            </div>
+            <div class="mc-programme-carousel" data-mcrown-programme-carousel>
+              <div class="mc-programme-tabs" role="tablist" aria-label="Программы Malta Crown">
+                <button id="programme-tab-primary" class="is-active" type="button" role="tab" aria-selected="true" aria-controls="programme-panel-primary" data-mcrown-tab="primary" data-track="Year 1-6">Начальная школа</button>
+                <button id="programme-tab-secondary" type="button" role="tab" aria-selected="false" aria-controls="programme-panel-secondary" tabindex="-1" data-mcrown-tab="secondary" data-track="Year 7-11, Year 12-13">Средняя и старшая школы</button>
+                <button id="programme-tab-senior" type="button" role="tab" aria-selected="false" aria-controls="programme-panel-senior" tabindex="-1" data-mcrown-tab="senior" data-track="Путь в университет">Путь в университет</button>
+                <button id="programme-tab-short" type="button" role="tab" aria-selected="false" aria-controls="programme-panel-short" tabindex="-1" data-mcrown-tab="short" data-track="Вводный курс и поддержка">Вводные программы и поддержка</button>
+              </div>
 
-            <div class="mc-programme-stage is-active" data-mcrown-panel="primary">
-              <article class="mc-programme-card mc-programme-card--feature" style="--mc-programme-bg: url('../images/mcrown-com-english-books.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-english-books.jpg" alt="Младшие ученики Malta Crown с учебными тетрадями" loading="lazy" decoding="async">
-                <span>Year 1-6</span>
-                <h3>Начальная школа</h3>
-                <p>Бережная адаптация к учебной среде, базовые академические навыки, английский язык и постоянное внимание педагогов в малых классах.</p>
-              </article>
-              <article class="mc-programme-card mc-programme-card--illustrated" style="--mc-programme-bg: url('../images/mcrown-live-st-julians-harbour.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-live-st-julians-harbour.jpg" alt="Сент-Джулианс рядом со школой Malta Crown, прогулочной набережной и городским пляжем" loading="lazy" decoding="async">
-                <span>Главное</span>
-                <h3>Английский как образовательная среда</h3>
-                <p>Ученики обучаются в европейской англоязычной стране и ежедневно используют язык в учебе, быту и общении.<br><br>Для поддержки студентов, которые не являются носителями английского языка, он преподается дополнительно с учетом персональных учебных целей.</p>
-              </article>
-            </div>
+              <div class="mc-programme-viewport" aria-live="polite">
+                <div id="programme-panel-primary" class="mc-programme-stage is-active" role="tabpanel" tabindex="0" aria-labelledby="programme-tab-primary" data-mcrown-panel="primary">
+                  <article class="mc-programme-slide">
+                    <figure class="mc-programme-slide__media">
+                      <img src="assets/images/mcrown-com-english-books.jpg" alt="Младшие ученики Malta Crown с учебными тетрадями" loading="lazy" decoding="async">
+                      <figcaption>Year 1-6</figcaption>
+                    </figure>
+                    <div class="mc-programme-slide__copy">
+                      <span class="mc-programme-slide__eyebrow">Year 1-6</span>
+                      <h3>Начальная школа</h3>
+                      <p>Бережная адаптация к учебной среде, базовые академические навыки, английский язык и постоянное внимание педагогов в малых классах.</p>
+                      <div class="mc-programme-slide__note">
+                        <span>Главное</span>
+                        <strong>Английский как образовательная среда</strong>
+                        <p>Ученики обучаются в европейской англоязычной стране и ежедневно используют язык в учебе, быту и общении. Дополнительный английский выстраивается под персональные учебные цели.</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
 
-            <div class="mc-programme-stage" data-mcrown-panel="secondary">
-              <article class="mc-programme-card mc-programme-card--feature" style="--mc-programme-bg: url('../images/mcrown-com-group-work.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-group-work.jpg" alt="Ученики Malta Crown работают над учебным заданием" loading="lazy" decoding="async">
-                <span>Year 7-11, Year 12-13</span>
-                <h3>Средняя и старшая школа</h3>
-                <p>В основе обучения — британская учебная программа, разработанная в соответствии со спецификациями Pearson Edexcel. Эта международно признанная система гарантирует, что учащиеся будут полностью готовы к экзаменам IGCSE (по завершении обучения в Year 7-Year 11), а затем — к программе A-Level (по завершении курса Year 12-Year 13). Успешные результаты этих экзаменов — прочная основа для поступления в университеты по всему миру.</p>
-              </article>
-              <article class="mc-programme-card mc-programme-card--illustrated" style="--mc-programme-bg: url('../images/mcrown-com-classroom-wide.jpeg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-classroom-wide.jpeg" alt="Учебный класс Malta Crown для дополнительных занятий" loading="lazy" decoding="async">
-                <span>Плюс</span>
-                <h3>Российский блок</h3>
-                <p>По запросу международная программа дополняется российской общеобразовательной программой с 1 по 11 класс и подготовкой к ОГЭ/ЕГЭ.</p>
-              </article>
-            </div>
+                <div id="programme-panel-secondary" class="mc-programme-stage" role="tabpanel" tabindex="0" aria-labelledby="programme-tab-secondary" data-mcrown-panel="secondary" hidden>
+                  <article class="mc-programme-slide">
+                    <figure class="mc-programme-slide__media">
+                      <img src="assets/images/mcrown-com-group-work.jpg" alt="Ученики Malta Crown работают над учебным заданием" loading="lazy" decoding="async">
+                      <figcaption>Year 7-13</figcaption>
+                    </figure>
+                    <div class="mc-programme-slide__copy">
+                      <span class="mc-programme-slide__eyebrow">Year 7-11, Year 12-13</span>
+                      <h3>Средняя и старшая школа</h3>
+                      <p>В основе обучения — британская учебная программа Pearson Edexcel: подготовка к IGCSE в Year 7-11 и к A-Level в Year 12-13. Эти результаты становятся прочной основой для поступления в университеты по всему миру.</p>
+                      <div class="mc-programme-slide__note">
+                        <span>Плюс</span>
+                        <strong>Российский блок</strong>
+                        <p>По запросу международная программа дополняется российской общеобразовательной программой с 1 по 11 класс и подготовкой к ОГЭ/ЕГЭ.</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
 
-            <div class="mc-programme-stage" data-mcrown-panel="senior">
-              <article class="mc-programme-card mc-programme-card--feature" style="--mc-programme-bg: url('../images/mcrown-com-senior-students.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-senior-students.jpg" alt="Старшие ученики Malta Crown" loading="lazy" decoding="async">
-                <h3>Подготовка к университету</h3>
-                <p>Усиленный английский, профориентация, участие в международных образовательных проектах, формирование престижного портфолио.</p>
-              </article>
-              <article class="mc-programme-card mc-programme-card--illustrated" style="--mc-programme-bg: url('../images/mcrown-live-ielts-certificate.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-live-ielts-certificate.jpg" alt="Международный языковой сертификат как часть академических достижений" loading="lazy" decoding="async">
-                <span>Результат</span>
-                <h3>Выбор университета</h3>
-                <p>Знакомство с образовательными возможностями престижных университетов в разных странах и требованиями к поступлению в них. Школа помогает ученику выстроить оптимальную образовательную траекторию и подготовиться к поступлению в выбранный университет.</p>
-              </article>
-            </div>
+                <div id="programme-panel-senior" class="mc-programme-stage" role="tabpanel" tabindex="0" aria-labelledby="programme-tab-senior" data-mcrown-panel="senior" hidden>
+                  <article class="mc-programme-slide">
+                    <figure class="mc-programme-slide__media">
+                      <img src="assets/images/mcrown-com-senior-students.jpg" alt="Старшие ученики Malta Crown" loading="lazy" decoding="async">
+                      <figcaption>University track</figcaption>
+                    </figure>
+                    <div class="mc-programme-slide__copy">
+                      <span class="mc-programme-slide__eyebrow">Путь в университет</span>
+                      <h3>Подготовка к университету</h3>
+                      <p>Усиленный английский, профориентация, участие в международных образовательных проектах и формирование портфолио помогают ученику двигаться к выбранной академической цели.</p>
+                      <div class="mc-programme-slide__note">
+                        <span>Результат</span>
+                        <strong>Выбор университета</strong>
+                        <p>Школа знакомит с требованиями престижных университетов в разных странах и помогает выстроить оптимальную траекторию поступления.</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
 
-            <div class="mc-programme-stage" data-mcrown-panel="short">
-              <article class="mc-programme-card mc-programme-card--feature" style="--mc-programme-bg: url('../images/mcrown-com-malta-excursion.jpg')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-malta-excursion.jpg" alt="Ученики Malta Crown на экскурсии по Мальте" loading="lazy" decoding="async">
-                <span>Вводный курс и каникулы</span>
-                <h3>Ознакомительные программы</h3>
-                <p>Краткосрочные форматы, которые помогают познакомиться с правилами школы и ее кампусом, английской средой и жизнью на Мальте:<br>
-                  - программы летнего лингвистического лагеря;<br>
-                  - тематические программы на осенних, зимних и весенних каникулах;<br>
-                  - участие в международной конференции на базе школы Malta Crown &laquo;Ступени познания&raquo;;<br>
-                  - краткосрочное обучение и проживание в школе-пансионе в период учебного года (до 3-х месяцев).</p>
-              </article>
-              <article class="mc-programme-card mc-programme-card--illustrated" style="--mc-programme-bg: url('../images/mcrown-com-campus-entrance.png')">
-                <img class="mc-programme-card__photo" src="assets/images/mcrown-com-campus-entrance.png" alt="Вход в школьный комплекс Malta Crown для знакомства семьи со школой" loading="lazy" decoding="async">
-                <span>Для семей</span>
-                <h3>Поддержка родителей</h3>
-                <p>Консультации по обучению, проживанию, визовым вопросам и адаптации семьи к образовательному маршруту ребенка.</p>
-              </article>
+                <div id="programme-panel-short" class="mc-programme-stage" role="tabpanel" tabindex="0" aria-labelledby="programme-tab-short" data-mcrown-panel="short" hidden>
+                  <article class="mc-programme-slide mc-programme-slide--compact">
+                    <figure class="mc-programme-slide__media">
+                      <img src="assets/images/mcrown-com-malta-excursion.jpg" alt="Ученики Malta Crown на экскурсии по Мальте" loading="lazy" decoding="async">
+                      <figcaption>Short stay</figcaption>
+                    </figure>
+                    <div class="mc-programme-slide__copy">
+                      <span class="mc-programme-slide__eyebrow">Вводный курс и каникулы</span>
+                      <h3>Ознакомительные программы</h3>
+                      <p>Краткосрочные форматы знакомят с правилами школы, кампусом, английской средой и жизнью на Мальте.</p>
+                      <ul class="mc-programme-slide__list">
+                        <li>летний языковой лагерь;</li>
+                        <li>осенние, зимние и весенние каникулы;</li>
+                        <li>конференция Malta Crown &laquo;Ступени познания&raquo;;</li>
+                        <li>учеба и проживание до 3 месяцев.</li>
+                      </ul>
+                      <div class="mc-programme-slide__note">
+                        <span>Для семей</span>
+                        <strong>Поддержка родителей</strong>
+                        <p>Консультации по учебе, проживанию, визам и адаптации семьи.</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
             </div>
           </div>
         </section>

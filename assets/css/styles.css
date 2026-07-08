@@ -1385,48 +1385,54 @@ body {
   background: linear-gradient(180deg, rgba(216, 166, 72, 0.9), rgba(55, 39, 28, 0.54));
 }
 
+.mc-programme-carousel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(55, 39, 28, 0.14);
+  border-radius: 22px 22px 22px 6px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 247, 223, 0.68)),
+    repeating-linear-gradient(90deg, rgba(55, 39, 28, 0.045) 0 1px, transparent 1px 32px);
+  padding: 8px;
+  box-shadow: 0 22px 54px rgba(55, 39, 28, 0.09);
+}
+
 .mc-programme-tabs {
   position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
-  margin-bottom: 14px;
-  border: 1px solid rgba(55, 39, 28, 0.14);
-  border-radius: 20px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 247, 223, 0.64)),
-    repeating-linear-gradient(90deg, rgba(55, 39, 28, 0.045) 0 1px, transparent 1px 32px);
-  padding: 6px;
-  box-shadow: 0 18px 45px rgba(55, 39, 28, 0.07);
+  margin: 0 0 8px;
 }
 
 .mc-programme-tabs button {
   position: relative;
   display: grid;
-  min-height: 66px;
+  min-height: 56px;
   align-content: center;
-  gap: 6px;
+  gap: 4px;
   border: 0;
   border-radius: 14px 14px 14px 4px;
-  background: transparent;
+  background: rgba(255, 253, 242, 0.64);
   color: var(--mc-brown);
   cursor: pointer;
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.12;
   overflow-wrap: anywhere;
-  padding: 10px 12px 10px 40px;
+  padding: 8px 10px 8px 34px;
   text-align: left;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .mc-programme-tabs button::before {
   position: absolute;
-  left: 16px;
+  left: 13px;
   top: 50%;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border: 2px solid rgba(189, 30, 36, 0.34);
   border-radius: 50%;
   background: #fff;
@@ -1438,10 +1444,10 @@ body {
   display: block;
   color: #0f7580;
   content: attr(data-track);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 950;
-  letter-spacing: 0.06em;
-  line-height: 1.15;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
   text-transform: uppercase;
 }
 
@@ -1452,6 +1458,10 @@ body {
   color: #fff;
   outline: none;
   transform: translateY(-1px);
+}
+
+.mc-programme-tabs button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(216, 166, 72, 0.34);
 }
 
 .mc-programme-tabs button:hover::before,
@@ -1467,112 +1477,96 @@ body {
   color: #ffe5a6;
 }
 
-.mc-programme-stage {
+.mc-programme-viewport {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(55, 39, 28, 0.12);
+  border-radius: 18px 18px 18px 4px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 221, 0.8)),
+    var(--mc-bg);
+}
+
+.mc-programme-stage,
+.mc-programme-stage[hidden] {
   display: none;
-  align-items: start;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 16px;
 }
 
 .mc-programme-stage.is-active {
-  display: grid;
+  display: block;
 }
 
-.mc-programme-card {
+.mc-programme-slide {
   position: relative;
   display: grid;
-  grid-template-rows: auto auto auto auto;
-  min-height: 0;
-  align-content: start;
-  gap: 0;
-  overflow: hidden;
-  border: 1px solid var(--mc-border);
-  border-radius: 20px 20px 20px 5px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 250, 221, 0.78)),
-    var(--mc-bg);
-  padding: 0;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  min-height: 392px;
 }
 
-.mc-programme-card::before {
-  content: none;
-}
-
-.mc-programme-card::after {
+.mc-programme-slide::after {
   position: absolute;
-  right: 16px;
-  bottom: 12px;
+  right: 24px;
+  bottom: 18px;
   z-index: 1;
-  color: rgba(55, 39, 28, 0.05);
+  color: rgba(55, 39, 28, 0.045);
   content: "MC";
   font-family: var(--mc-font-serif);
-  font-size: 96px;
+  font-size: 112px;
   font-style: italic;
   line-height: 1;
-}
-
-.mc-programme-card::before,
-.mc-programme-card::after {
   pointer-events: none;
 }
 
-.mc-programme-card:hover {
-  border-color: rgba(189, 30, 36, 0.24);
-  box-shadow: 0 20px 55px rgba(55, 39, 28, 0.11);
-  transform: translateY(-3px);
-}
-
-.mc-programme-card__photo {
+.mc-programme-slide__media {
   position: relative;
   z-index: 2;
-  display: block;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-right: 1px solid rgba(55, 39, 28, 0.12);
+  background: var(--mc-bg-soft);
+}
+
+.mc-programme-slide__media img {
   width: 100%;
-  height: clamp(210px, 22vw, 280px);
-  border: 0;
-  border-radius: 19px 19px 0 0;
-  box-shadow: none;
+  height: 100%;
+  min-height: 392px;
   object-fit: cover;
-  transform: none;
-  transition: filter 260ms ease;
+  transition: filter 260ms ease, transform 260ms ease;
 }
 
-.mc-programme-card:hover .mc-programme-card__photo {
+.mc-programme-carousel:hover .mc-programme-slide__media img {
   filter: saturate(1.04) contrast(1.02);
-  transform: none;
 }
 
-.mc-programme-card--feature {
-  background:
-    linear-gradient(135deg, rgba(255, 243, 230, 0.9), rgba(242, 248, 235, 0.78)),
-    repeating-linear-gradient(135deg, rgba(189, 30, 36, 0.06) 0 1px, transparent 1px 18px),
-    var(--mc-bg-soft);
+.mc-programme-slide__media figcaption {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  max-width: calc(100% - 36px);
+  border: 1px solid rgba(255, 229, 166, 0.54);
+  border-radius: 999px;
+  background: rgba(55, 39, 28, 0.82);
+  color: #ffe5a6;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 8px 11px;
+  text-transform: uppercase;
 }
 
-.mc-programme-card--feature .mc-programme-card__photo {
-  height: clamp(230px, 24vw, 300px);
-}
-
-.mc-programme-card--illustrated {
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 223, 0.78)),
-    repeating-linear-gradient(135deg, rgba(216, 166, 72, 0.045) 0 1px, transparent 1px 18px),
-    var(--mc-bg);
-}
-
-.mc-programme-card--illustrated .mc-programme-card__photo {
-  width: 100%;
-  height: clamp(200px, 21vw, 260px);
-  transform: none;
-}
-
-.mc-programme-card--illustrated:hover .mc-programme-card__photo {
-  transform: none;
-}
-
-.mc-programme-card span {
+.mc-programme-slide__copy {
   position: relative;
   z-index: 2;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 32px 30px;
+}
+
+.mc-programme-slide__eyebrow {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
@@ -1580,35 +1574,82 @@ body {
   border-radius: 999px;
   background: rgba(255, 253, 242, 0.92);
   color: var(--mc-red);
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.05em;
   line-height: 1.15;
-  margin: 22px 24px 0;
-  padding: 5px 9px;
-  text-shadow: none;
+  margin-bottom: 11px;
+  padding: 6px 10px;
   text-transform: uppercase;
 }
 
-.mc-programme-card h3 {
-  position: relative;
-  z-index: 2;
+.mc-programme-slide h3 {
   margin: 0;
   color: var(--mc-ink);
-  font-size: 27px;
+  font-size: 40px;
   font-weight: 950;
-  line-height: 1.12;
-  margin: 10px 24px 0;
+  line-height: 1.02;
 }
 
-.mc-programme-card p {
-  position: relative;
-  z-index: 2;
-  max-width: none;
-  margin: 10px 24px 24px;
+.mc-programme-slide p {
+  max-width: 620px;
+  margin: 12px 0 0;
   color: var(--mc-muted);
-  font-size: 15px;
-  line-height: 1.52;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.mc-programme-slide__note {
+  position: relative;
+  margin-top: 18px;
+  border: 1px solid rgba(216, 166, 72, 0.22);
+  border-left: 4px solid var(--mc-gold);
+  border-radius: 15px 15px 15px 4px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 242, 0.88), rgba(242, 248, 235, 0.72)),
+    repeating-linear-gradient(135deg, rgba(216, 166, 72, 0.05) 0 1px, transparent 1px 16px);
+  padding: 14px 16px 15px;
+}
+
+.mc-programme-slide__note span {
+  display: block;
+  color: var(--mc-sea);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
+.mc-programme-slide__note strong {
+  display: block;
+  color: var(--mc-brown);
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.mc-programme-slide__note p {
+  margin-top: 7px;
+  color: #544942;
+  font-size: 14px;
+  line-height: 1.42;
+}
+
+.mc-programme-slide__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 18px;
+  margin: 14px 0 0;
+  color: var(--mc-muted);
+  font-size: 14px;
+  line-height: 1.35;
+  padding-left: 18px;
+}
+
+.mc-programme-slide__list li::marker {
+  color: var(--mc-red);
 }
 
 .mc-editorial {
@@ -2881,41 +2922,40 @@ body {
   }
 
   .mc-programme-tabs {
-    margin-bottom: 12px;
+    margin-bottom: 7px;
   }
 
   .mc-programme-tabs button {
-    min-height: 50px;
+    min-height: 48px;
     font-size: 12px;
     padding-top: 8px;
     padding-bottom: 8px;
   }
 
-  .mc-programme-card,
-  .mc-programme-card--feature,
-  .mc-programme-card--illustrated {
-    min-height: 0;
-    padding: 0;
+  .mc-programme-slide {
+    min-height: 330px;
   }
 
-  .mc-programme-card__photo {
-    width: 100%;
-    height: 210px;
-    border-width: 0;
+  .mc-programme-slide__media img {
+    min-height: 330px;
   }
 
-  .mc-programme-card--illustrated .mc-programme-card__photo {
-    width: 100%;
-    height: 200px;
+  .mc-programme-slide__copy {
+    padding: 22px 26px 24px;
   }
 
-  .mc-programme-card h3 {
-    font-size: 25px;
+  .mc-programme-slide h3 {
+    font-size: 32px;
   }
 
-  .mc-programme-card p {
+  .mc-programme-slide p {
     font-size: 14px;
     line-height: 1.44;
+  }
+
+  .mc-programme-slide__note {
+    margin-top: 13px;
+    padding: 12px 14px;
   }
 
   .mc-editorial__grid {
@@ -3498,16 +3538,15 @@ body {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 5px;
-    margin-bottom: 14px;
-    padding: 6px;
+    margin-bottom: 6px;
   }
 
   .mc-programme-tabs button {
-    min-height: 64px;
+    min-height: 56px;
     border-radius: 14px 14px 14px 4px;
     font-size: 11px;
-    line-height: 1.15;
-    padding: 10px 8px 10px 32px;
+    line-height: 1.12;
+    padding: 9px 8px 9px 31px;
     min-width: 0;
     overflow-wrap: anywhere;
   }
@@ -3523,60 +3562,85 @@ body {
     letter-spacing: 0.04em;
   }
 
-  .mc-programme-stage,
-  .mc-programme-stage.is-active {
+  .mc-programme-slide {
     grid-template-columns: 1fr;
-  }
-
-  .mc-programme-card,
-  .mc-programme-card--feature {
     min-height: 0;
-    padding: 0;
   }
 
-  .mc-programme-card::before {
-    content: none;
-  }
-
-  .mc-programme-card::after {
-    right: 12px;
+  .mc-programme-slide::after {
+    right: 14px;
     bottom: 10px;
-    z-index: 1;
-    display: block;
-    background: none;
-    color: rgba(55, 39, 28, 0.05);
-    content: "MC";
+    font-size: 78px;
   }
 
-  .mc-programme-card__photo {
-    display: block !important;
-    height: 178px;
-  }
-
-  .mc-programme-card--illustrated .mc-programme-card__photo {
-    display: block !important;
+  .mc-programme-slide__media {
     height: 170px;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(55, 39, 28, 0.12);
   }
 
-  .mc-programme-card h3 {
+  .mc-programme-slide__media img {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .mc-programme-slide__media figcaption {
+    left: 14px;
+    bottom: 12px;
+    font-size: 10px;
+    padding: 7px 9px;
+  }
+
+  .mc-programme-slide__copy {
+    padding: 17px 18px 18px;
+  }
+
+  .mc-programme-slide__eyebrow {
+    font-size: 10px;
+    margin-bottom: 8px;
+    padding: 5px 8px;
+  }
+
+  .mc-programme-slide h3 {
     font-size: 24px;
-    margin: 9px 20px 0;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.85);
   }
 
-  .mc-programme-card p {
+  .mc-programme-slide p {
     color: #544942;
     font-size: 14px;
-    line-height: 1.45;
-    margin: 8px 20px 20px;
+    line-height: 1.42;
+    margin-top: 8px;
     text-shadow: 0 1px 0 rgba(255, 253, 244, 0.75);
   }
 
-  .mc-programme-card span {
-    font-size: 11px;
-    margin: 18px 20px 0;
-    padding: 5px 8px;
-    text-shadow: none;
+  .mc-programme-slide__note {
+    margin-top: 11px;
+    padding: 11px 12px;
+  }
+
+  .mc-programme-slide__note span {
+    font-size: 9px;
+    margin-bottom: 6px;
+  }
+
+  .mc-programme-slide__note strong {
+    font-size: 15px;
+  }
+
+  .mc-programme-slide__note p {
+    font-size: 13px;
+    line-height: 1.36;
+    margin-top: 6px;
+  }
+
+  .mc-programme-slide__list {
+    gap: 5px 14px;
+    font-size: 13px;
+    line-height: 1.3;
+    margin-top: 10px;
+    padding-left: 17px;
   }
 
   .mc-editorial__grid {
@@ -3953,29 +4017,67 @@ body {
 
   .mc-programme-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
+    gap: 4px;
+    margin-bottom: 5px;
   }
 
   .mc-programme-tabs button {
-    min-height: 64px;
+    min-height: 44px;
     font-size: 10px;
-    padding: 8px 8px 8px 28px;
+    padding: 7px 7px 7px 25px;
   }
 
   .mc-programme-tabs button::before {
-    left: 10px;
+    left: 9px;
+    width: 10px;
+    height: 10px;
   }
 
   .mc-programme-tabs button::after {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 0.03em;
+    display: none;
   }
 
-  .mc-programme-card__photo,
-  .mc-programme-card--illustrated .mc-programme-card__photo {
-    display: block !important;
-    height: 156px;
+  .mc-programme-slide__media {
+    height: 136px;
+  }
+
+  .mc-programme-slide__copy {
+    padding: 12px 14px 13px;
+  }
+
+  .mc-programme-slide__eyebrow {
+    display: none;
+  }
+
+  .mc-programme-slide h3 {
+    font-size: 21px;
+  }
+
+  .mc-programme-slide p {
+    font-size: 12px;
+    line-height: 1.34;
+  }
+
+  .mc-programme-slide__note {
+    margin-top: 8px;
+    padding: 9px 10px;
+  }
+
+  .mc-programme-slide__note strong {
+    font-size: 13px;
+  }
+
+  .mc-programme-slide__note p,
+  .mc-programme-slide__list {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .mc-programme-slide__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 9px;
+    margin-top: 8px;
+    padding-left: 15px;
   }
 
   .mc-hero-card--main figcaption {

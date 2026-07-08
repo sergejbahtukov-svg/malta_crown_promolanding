@@ -282,23 +282,64 @@
     });
   }
 
-  var tabButtons = root.querySelectorAll("[data-mcrown-tab]");
-  var tabPanels = root.querySelectorAll("[data-mcrown-panel]");
+  root.querySelectorAll("[data-mcrown-programme-carousel]").forEach(function (carousel) {
+    var tabButtons = Array.prototype.slice.call(carousel.querySelectorAll("[data-mcrown-tab]"));
+    var tabPanels = Array.prototype.slice.call(carousel.querySelectorAll("[data-mcrown-panel]"));
 
-  tabButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
+    if (!tabButtons.length || !tabPanels.length) {
+      return;
+    }
+
+    function activateProgrammeTab(button, shouldFocus) {
       var activeTab = button.getAttribute("data-mcrown-tab");
 
       tabButtons.forEach(function (item) {
         var isActive = item === button;
         item.classList.toggle("is-active", isActive);
         item.setAttribute("aria-selected", String(isActive));
+        item.setAttribute("tabindex", isActive ? "0" : "-1");
       });
 
       tabPanels.forEach(function (panel) {
-        panel.classList.toggle("is-active", panel.getAttribute("data-mcrown-panel") === activeTab);
+        var isActive = panel.getAttribute("data-mcrown-panel") === activeTab;
+        panel.classList.toggle("is-active", isActive);
+        panel.hidden = !isActive;
+        panel.setAttribute("aria-hidden", String(!isActive));
+      });
+
+      if (shouldFocus) {
+        button.focus();
+      }
+    }
+
+    tabButtons.forEach(function (button, index) {
+      button.addEventListener("click", function () {
+        activateProgrammeTab(button, false);
+      });
+
+      button.addEventListener("keydown", function (event) {
+        var nextIndex = index;
+
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+          nextIndex = (index + 1) % tabButtons.length;
+        } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+          nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+        } else if (event.key === "Home") {
+          nextIndex = 0;
+        } else if (event.key === "End") {
+          nextIndex = tabButtons.length - 1;
+        } else {
+          return;
+        }
+
+        event.preventDefault();
+        activateProgrammeTab(tabButtons[nextIndex], true);
       });
     });
+
+    activateProgrammeTab(tabButtons.find(function (button) {
+      return button.getAttribute("aria-selected") === "true";
+    }) || tabButtons[0], false);
   });
 
   root.querySelectorAll("[data-mcrown-accordion] article").forEach(function (item) {
