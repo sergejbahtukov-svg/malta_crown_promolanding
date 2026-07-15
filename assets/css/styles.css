@@ -136,34 +136,6 @@ body {
   min-height: 82px;
 }
 
-/* Preflight landing update: fees, comparison and two-step consultation form. */
-.mc-hero__quick-facts {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin: 24px 0 0;
-}
-
-.mc-hero__quick-facts span {
-  display: flex;
-  min-height: 86px;
-  flex-direction: column;
-  justify-content: center;
-  padding: 14px 16px;
-  border: 1px solid var(--mc-line);
-  border-radius: 8px 8px 8px 2px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--mc-muted);
-  font-size: 12px;
-}
-
-.mc-hero__quick-facts strong {
-  color: var(--mc-red);
-  font-family: var(--mc-font-serif);
-  font-size: 21px;
-  line-height: 1.1;
-}
-
 .mc-section__head--split {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.7fr);
@@ -630,7 +602,6 @@ body {
 }
 
 @media (max-width: 720px) {
-  .mc-hero__quick-facts,
   .mc-fees__summary,
   .mc-fees__details,
   .mc-starts__cards,
@@ -644,10 +615,6 @@ body {
   .mc-price-card:last-child,
   .mc-starts__cards article:last-child {
     grid-column: auto;
-  }
-
-  .mc-hero__quick-facts span {
-    min-height: 70px;
   }
 
   .mc-price-card {
@@ -4561,10 +4528,6 @@ body {
     gap: 4px;
   }
 
-  .mc-hero__actions .mc-button--secondary {
-    display: none;
-  }
-
   .mc-button::after {
     width: 18px;
     height: 10px;
@@ -4965,25 +4928,6 @@ body {
     line-height: 1.55;
   }
 
-  .mc-hero__quick-facts {
-    order: 4;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 8px;
-  }
-
-  .mc-hero__quick-facts > :last-child {
-    grid-column: 1 / -1;
-  }
-
-  .mc-hero__quick-facts > * {
-    min-height: 76px;
-    padding: 13px 14px;
-  }
-
-  .mc-hero__quick-facts strong {
-    font-size: 20px;
-  }
-
   .mc-hero__actions {
     order: 5;
   }
@@ -5044,10 +4988,6 @@ body {
   .mc-hero h1 {
     font-size: clamp(31px, 9vw, 35px);
     line-height: 0.98;
-  }
-
-  .mc-hero__quick-facts strong {
-    font-size: 18px;
   }
 
   .mc-hero__actions .mc-btn {
@@ -5484,11 +5424,6 @@ body {
 }
 
 /* July 2026 review: clearer school promise, fee structure and intake dates. */
-.mc-hero__quick-facts {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 600px;
-}
-
 .mc-hero__advantage {
   max-width: 720px;
   margin-top: 12px;
@@ -5691,27 +5626,18 @@ body {
     order: 3;
   }
 
-  .mc-hero__quick-facts {
-    order: 4;
-    max-width: none;
-  }
-
-  .mc-hero__quick-facts > :last-child {
-    grid-column: auto;
-  }
-
   .mc-hero__advantage {
-    order: 5;
+    order: 4;
     max-width: none;
     margin-top: 0;
   }
 
   .mc-hero__actions {
-    order: 6;
+    order: 5;
   }
 
   .mc-hero__visual {
-    order: 7;
+    order: 6;
   }
 
   .mc-price-card {
@@ -5742,10 +5668,6 @@ body {
   .mc-hero__advantage > p {
     font-size: 13px;
     line-height: 1.45;
-  }
-
-  .mc-hero__actions .mc-button--fees {
-    display: flex;
   }
 
   .mc-price-scale dd {
