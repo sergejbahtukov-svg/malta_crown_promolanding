@@ -163,7 +163,7 @@
       event.preventDefault();
       closeMenu();
       target.scrollIntoView({
-        behavior: prefersReducedMotion() ? "auto" : "smooth",
+        behavior: prefersReducedMotion() || event.type === "keydown" ? "auto" : "smooth",
         block: "start"
       });
     }
