@@ -1,0 +1,42 @@
+name: Deploy test landing to Yandex Cloud
+
+on:
+  push:
+    branches: [landing-test]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-test:
+    runs-on: ubuntu-latest
+    env:
+      TEST_BUCKET: malta-crown-preflight-20260714
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare static test build
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          cp index.html consent.html privacy.html "$RUNNER_TEMP/site/"
+          cp -R assets "$RUNNER_TEMP/site/assets"
+
+      - name: Install AWS CLI
+        run: |
+          tmp_dir="$(mktemp -d)"
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "$tmp_dir/awscliv2.zip"
+          unzip -q "$tmp_dir/awscliv2.zip" -d "$tmp_dir"
+          sudo "$tmp_dir/aws/install" --update
+
+      - name: Sync static site to isolated test bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ru-central1
+          AWS_ENDPOINT_URL: https://storage.yandexcloud.net
+        run: |
+          aws s3 sync "$RUNNER_TEMP/site" "s3://$TEST_BUCKET" \
+            --endpoint-url=https://storage.yandexcloud.net \
+            --acl public-read \
+            --delete

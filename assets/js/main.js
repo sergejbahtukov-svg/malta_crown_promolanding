@@ -12,7 +12,9 @@
     emailClick: "email_click",
     whatsappClick: "whatsapp_click",
     maxClick: "max_click",
-    formSubmit: "lead_form_submit"
+    formStart: "lead_form_start",
+    formSubmit: "lead_form_submit",
+    presentation: "presentation_get"
   };
 
   function reachGoal(goalName, params) {
@@ -38,12 +40,10 @@
     }
 
     var banner = document.createElement("div");
-    var privacyHref = window.location.pathname.indexOf("privacy.html") !== -1 ? "#policy-title" : "privacy.html";
-
     banner.className = "mc-cookie";
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Уведомление об использовании cookie");
-    banner.innerHTML = '<p>Мы используем cookie и Яндекс Метрику для аналитики, улучшения сайта и учета рекламных целей.</p><div class="mc-cookie__actions"><a class="mc-cookie__link" href="' + privacyHref + '">Политика обработки данных</a><button class="mc-cookie__button" type="button" data-mcrown-cookie-accept>Понятно</button></div>';
+    banner.innerHTML = '<p>Мы используем cookie, чтобы сайт работал корректно.</p><button class="mc-cookie__button" type="button" data-mcrown-cookie-accept>Хорошо</button>';
 
     document.body.appendChild(banner);
 
@@ -80,7 +80,9 @@
     var normalizedHref = href.toLowerCase();
     var goalName = "";
 
-    if (normalizedHref.indexOf("tel:") === 0) {
+    if (link.hasAttribute("data-presentation-download")) {
+      goalName = METRIKA_GOALS.presentation;
+    } else if (normalizedHref.indexOf("tel:") === 0) {
       goalName = METRIKA_GOALS.phoneClick;
     } else if (normalizedHref.indexOf("mailto:") === 0) {
       goalName = METRIKA_GOALS.emailClick;
@@ -114,6 +116,14 @@
     menuButton.setAttribute("aria-label", "Открыть меню");
   }
 
+  var reducedMotionQuery = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : null;
+
+  function prefersReducedMotion() {
+    return Boolean(reducedMotionQuery && reducedMotionQuery.matches);
+  }
+
   if (menuButton && nav) {
     menuButton.addEventListener("click", function () {
       var isOpen = nav.classList.toggle("is-open");
@@ -139,7 +149,7 @@
   }
 
   root.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener("click", function (event) {
+    function activateAnchor(event) {
       var targetId = link.getAttribute("href");
       if (!targetId || targetId === "#") {
         return;
@@ -152,51 +162,20 @@
 
       event.preventDefault();
       closeMenu();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    link.addEventListener("click", activateAnchor);
+
+    link.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        activateAnchor(event);
+      }
     });
   });
-
-  var deadlineCounters = root.querySelectorAll("[data-mcrown-deadline-days]");
-  var deadlineLabels = root.querySelectorAll("[data-mcrown-deadline-label]");
-
-  if (deadlineCounters.length) {
-    var deadlineDate = new Date(2026, 6, 31);
-    var today = new Date();
-    var todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    var dayMs = 24 * 60 * 60 * 1000;
-    var daysLeft = Math.ceil((deadlineDate.getTime() - todayStart.getTime()) / dayMs);
-
-    function pluralizeDays(number) {
-      var lastDigit = number % 10;
-      var lastTwoDigits = number % 100;
-
-      if (lastDigit === 1 && lastTwoDigits !== 11) {
-        return "день";
-      }
-
-      if (lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14)) {
-        return "дня";
-      }
-
-      return "дней";
-    }
-
-    var counterText = daysLeft > 0 ? daysLeft + " " + pluralizeDays(daysLeft) : "сегодня";
-    var labelText = daysLeft > 0 ? "осталось до 31 июля" : "последний день подачи";
-
-    if (daysLeft < 0) {
-      counterText = "срок прошел";
-      labelText = "для начала обучения в сентябре";
-    }
-
-    deadlineCounters.forEach(function (counter) {
-      counter.textContent = counterText;
-    });
-
-    deadlineLabels.forEach(function (label) {
-      label.textContent = labelText;
-    });
-  }
 
   var heroCarousel = root.querySelector("[data-mcrown-hero-carousel]");
 
@@ -207,7 +186,7 @@
     var heroCaptionText = heroCarousel.querySelector("[data-mcrown-hero-caption-text]");
     var activeHeroSlide = 0;
     var heroCarouselTimer = null;
-    var reduceHeroMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var reduceHeroMotion = prefersReducedMotion();
 
     function showHeroSlide(nextIndex) {
       if (!heroSlides.length) {
@@ -342,6 +321,53 @@
     }) || tabButtons[0], false);
   });
 
+  root.querySelectorAll("[data-mcrown-boarding-gallery]").forEach(function (gallery) {
+    var slides = Array.prototype.slice.call(gallery.querySelectorAll("[data-mcrown-boarding-slide]"));
+    var previousButton = gallery.querySelector("[data-mcrown-boarding-prev]");
+    var nextButton = gallery.querySelector("[data-mcrown-boarding-next]");
+    var counter = gallery.querySelector("[data-mcrown-boarding-counter]");
+    var activeSlide = 0;
+
+    if (!slides.length || !previousButton || !nextButton) {
+      return;
+    }
+
+    function showBoardingSlide(nextIndex) {
+      activeSlide = (nextIndex + slides.length) % slides.length;
+
+      slides.forEach(function (slide, index) {
+        var isActive = index === activeSlide;
+        slide.classList.toggle("is-active", isActive);
+        slide.hidden = !isActive;
+        slide.setAttribute("aria-hidden", String(!isActive));
+      });
+
+      if (counter) {
+        counter.textContent = String(activeSlide + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+      }
+    }
+
+    previousButton.addEventListener("click", function () {
+      showBoardingSlide(activeSlide - 1);
+    });
+
+    nextButton.addEventListener("click", function () {
+      showBoardingSlide(activeSlide + 1);
+    });
+
+    gallery.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showBoardingSlide(activeSlide - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showBoardingSlide(activeSlide + 1);
+      }
+    });
+
+    showBoardingSlide(0);
+  });
+
   root.querySelectorAll("[data-mcrown-accordion] article").forEach(function (item) {
     var trigger = item.querySelector("button");
     var panel = item.querySelector("div");
@@ -364,7 +390,25 @@
     var formEndpoint = form.getAttribute("data-mcrown-form-endpoint");
     var submitButton = form.querySelector('[type="submit"]');
     var submitButtonText = submitButton ? submitButton.textContent : "";
+    var formFields = form.querySelector("[data-form-fields]");
+    var successPanel = form.querySelector("[data-form-success]");
     var isFormSubmitting = false;
+    var hasStartedForm = false;
+
+    function trackFormStart() {
+      if (hasStartedForm) {
+        return;
+      }
+
+      hasStartedForm = true;
+      reachGoal(METRIKA_GOALS.formStart, {
+        form: "admissions",
+        page: window.location.pathname
+      });
+    }
+
+    form.addEventListener("input", trackFormStart);
+    form.addEventListener("change", trackFormStart);
 
     function setFormSubmitting(isSubmitting) {
       isFormSubmitting = isSubmitting;
@@ -451,11 +495,19 @@
         .then(function () {
           reachGoal(METRIKA_GOALS.formSubmit, {
             form: "admissions",
-            page: window.location.pathname
+            page: window.location.pathname,
+            configuredGoalId: form.getAttribute("data-metrika-goal-id") || ""
           });
 
-          status.textContent = "Спасибо! Заявка отправлена. Мы свяжемся с вами в ближайшее время.";
+          status.textContent = "";
           form.reset();
+          if (formFields) {
+            formFields.hidden = true;
+          }
+          if (successPanel) {
+            successPanel.hidden = false;
+            successPanel.focus({ preventScroll: true });
+          }
         })
         .catch(function () {
           status.textContent = "Не удалось отправить заявку. Пожалуйста, позвоните или напишите нам на email.";
