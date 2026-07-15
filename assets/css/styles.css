@@ -483,6 +483,17 @@ body {
   margin: 0;
 }
 
+.mc-documents__content {
+  display: grid;
+  gap: 18px;
+}
+
+.mc-documents__content strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--mc-ink);
+}
+
 .mc-admissions__benefits {
   display: grid;
   grid-template-columns: 1fr 1fr;
