@@ -149,7 +149,9 @@
   }
 
   root.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    function activateAnchor(event) {
+    var suppressKeyboardClick = false;
+
+    function activateAnchor(event, forceImmediate) {
       var targetId = link.getAttribute("href");
       if (!targetId || targetId === "#") {
         return;
@@ -162,18 +164,37 @@
 
       event.preventDefault();
       closeMenu();
-      target.scrollIntoView({
-        behavior: prefersReducedMotion() || event.type === "keydown" ? "auto" : "smooth",
-        block: "start"
-      });
+      var immediateScroll = forceImmediate || prefersReducedMotion();
+
+      if (immediateScroll) {
+        var previousScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
+        target.scrollIntoView({ behavior: "auto", block: "start" });
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      } else {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
 
-    link.addEventListener("click", activateAnchor);
+    link.addEventListener("click", function (event) {
+      if (suppressKeyboardClick) {
+        event.preventDefault();
+        return;
+      }
+
+      activateAnchor(event, false);
+    });
 
     link.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        activateAnchor(event);
+      if (event.key !== "Enter") {
+        return;
       }
+
+      suppressKeyboardClick = true;
+      activateAnchor(event, true);
+      window.setTimeout(function () {
+        suppressKeyboardClick = false;
+      }, 0);
     });
   });
 
