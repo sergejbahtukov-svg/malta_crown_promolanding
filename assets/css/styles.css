@@ -747,6 +747,10 @@ body {
   outline: none;
 }
 
+.mc-nav__phone {
+  display: none;
+}
+
 .mc-header__contacts {
   display: flex;
   justify-self: end;
@@ -3856,6 +3860,16 @@ body {
     display: none;
   }
 
+  .mc-nav__phone {
+    display: inline-flex;
+    min-height: 46px;
+    margin-top: 6px;
+    border: 1px solid rgba(189, 30, 36, 0.24);
+    background: rgba(189, 30, 36, 0.08);
+    color: var(--mc-red-dark);
+    font-size: 13px;
+  }
+
   .mc-nav {
     inset: 74px 14px auto;
     z-index: 30;
@@ -6819,5 +6833,84 @@ body {
       "content"
       "media"
       "routine";
+  }
+}
+
+/* Boarding gallery: a fixed frame keeps every original photograph fully visible. */
+.mc-boarding-gallery__slide,
+.mc-boarding-gallery__slide[hidden] {
+  background: #eee8de;
+}
+
+.mc-boarding__media .mc-boarding-gallery__slide img {
+  object-fit: contain;
+  background: #eee8de;
+}
+
+@media (min-width: 1101px) {
+  .mc-boarding__grid {
+    grid-template-rows: 430px auto;
+  }
+
+  .mc-boarding__media[data-mcrown-boarding-gallery] {
+    grid-template-rows: 380px 50px;
+    min-height: 430px;
+  }
+
+  .mc-boarding-gallery__slides {
+    height: 380px;
+  }
+
+  .mc-boarding-gallery__slide.is-active {
+    grid-template-rows: 302px 78px;
+  }
+
+  .mc-boarding__media .mc-boarding-gallery__slide img {
+    height: 302px;
+  }
+
+  /* Preserve the editorial hierarchy while fitting it more comfortably in a desktop view. */
+  .mc-editorial {
+    padding: 38px 0;
+  }
+
+  .mc-editorial__grid {
+    gap: 40px;
+  }
+
+  .mc-editorial h2 {
+    margin-top: 12px;
+    font-size: 40px;
+  }
+
+  .mc-editorial__quote {
+    margin-top: 18px;
+  }
+
+  .mc-editorial__photo {
+    margin-top: 18px;
+  }
+
+  .mc-editorial__photo img {
+    height: 224px;
+  }
+
+  .mc-editorial__photo figcaption {
+    padding: 12px 14px 13px;
+  }
+
+  .mc-benefits {
+    grid-auto-rows: minmax(218px, 1fr);
+    gap: 10px;
+  }
+
+  .mc-benefits article {
+    padding: 56px 16px 16px;
+  }
+
+  .mc-editorial__copy > p {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.48;
   }
 }
