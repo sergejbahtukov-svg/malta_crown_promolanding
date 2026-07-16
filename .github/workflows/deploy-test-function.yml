@@ -1,0 +1,174 @@
+name: Deploy isolated test mail function
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_test_function_deploy:
+        description: Type DEPLOY_ISOLATED_TEST_FUNCTION to create or update only the test mail function.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: malta-crown-test-mail-function
+  cancel-in-progress: false
+
+jobs:
+  deploy-test-function:
+    runs-on: ubuntu-latest
+    env:
+      # Do not replace these production safeguards with configuration variables.
+      PRODUCTION_FUNCTION_ID: d4ererc6uunkql07t59d
+      PRODUCTION_SMTP_RECIPIENT: mskoffice@maltacrown.ru
+      PRODUCTION_SMTP_SECRET_ID: e6qj62vjpmqtniokmnrt
+      PRODUCTION_SERVICE_ACCOUNT_ID: ajet2vjo0tsv19opo4ci
+
+      # These repository variables must point to test-only Yandex Cloud resources.
+      TEST_YC_FOLDER_ID: ${{ vars.TEST_YC_FOLDER_ID }}
+      TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID }}
+      TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID }}
+      TEST_SMTP_SECRET_ID: ${{ vars.TEST_SMTP_SECRET_ID }}
+      # The test recipient is intentionally fixed; the existing mailbox rule forwards it onward.
+      TEST_SMTP_TO_EMAIL: sbahtyukov@ya.ru
+      TEST_FUNCTION_NAME: malta-crown-preflight-mail
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Confirm isolated test deployment configuration
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ inputs.confirm_test_function_deploy }}" != "DEPLOY_ISOLATED_TEST_FUNCTION" ]]; then
+            echo "::error title=Explicit confirmation required::This workflow only runs after the exact test-only confirmation is supplied."
+            exit 1
+          fi
+
+          for variable in \
+            TEST_YC_FOLDER_ID \
+            TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID \
+            TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID \
+            TEST_SMTP_SECRET_ID; do
+            if [[ -z "${!variable:-}" ]]; then
+              echo "::error title=Missing test-only configuration::$variable must be set as a repository variable."
+              exit 1
+            fi
+          done
+
+          if [[ "$TEST_SMTP_TO_EMAIL" == "$PRODUCTION_SMTP_RECIPIENT" ]]; then
+            echo "::error title=Unsafe test recipient::TEST_SMTP_TO_EMAIL must not be the production recipient."
+            exit 1
+          fi
+
+          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtyukov@ya.ru" ]]; then
+            echo "::error title=Unsafe test recipient::The test recipient is protected and must remain sbahtyukov@ya.ru."
+            exit 1
+          fi
+
+          if [[ "$TEST_SMTP_SECRET_ID" == "$PRODUCTION_SMTP_SECRET_ID" ]]; then
+            echo "::error title=Unsafe test SMTP secret::TEST_SMTP_SECRET_ID must not reference the production SMTP secret."
+            exit 1
+          fi
+
+          for service_account in "$TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID" "$TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID"; do
+            if [[ "$service_account" == "$PRODUCTION_SERVICE_ACCOUNT_ID" ]]; then
+              echo "::error title=Unsafe test service account::Test deployment and runtime service accounts must not reuse the production service account."
+              exit 1
+            fi
+          done
+
+      - name: Install Yandex Cloud CLI
+        run: |
+          set -euo pipefail
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$RUNNER_TEMP/yandex-cloud" -n
+          echo "$RUNNER_TEMP/yandex-cloud/bin" >> "$GITHUB_PATH"
+
+      - name: Get test-only Yandex Cloud IAM token
+        id: get-iam-token
+        uses: docker://ghcr.io/yc-actions/yc-iam-token-fed:1.0.0
+        with:
+          yc-sa-id: ${{ vars.TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID }}
+
+      - name: Create or resolve the isolated test function
+        id: test-function
+        env:
+          YC_IAM_TOKEN: ${{ steps.get-iam-token.outputs.token }}
+        run: |
+          set -euo pipefail
+
+          resolve_function_id() {
+            yc serverless function list --folder-id "$TEST_YC_FOLDER_ID" --format json > "$RUNNER_TEMP/test-functions.json"
+            python3 - "$RUNNER_TEMP/test-functions.json" "$TEST_FUNCTION_NAME" <<'PY'
+          import json
+          import sys
+
+          payload = json.load(open(sys.argv[1], encoding="utf-8"))
+          functions = payload if isinstance(payload, list) else payload.get("functions", payload.get("items", []))
+          matches = [item.get("id", "") for item in functions if item.get("name") == sys.argv[2]]
+          if len(matches) > 1:
+              raise SystemExit("More than one test function has the protected test name.")
+          print(matches[0] if matches else "")
+          PY
+          }
+
+          test_function_id="$(resolve_function_id)"
+          if [[ -z "$test_function_id" ]]; then
+            yc serverless function create \
+              --folder-id "$TEST_YC_FOLDER_ID" \
+              --name "$TEST_FUNCTION_NAME"
+            test_function_id="$(resolve_function_id)"
+          fi
+
+          if [[ -z "$test_function_id" || "$test_function_id" == "$PRODUCTION_FUNCTION_ID" ]]; then
+            echo "::error title=Unsafe test function::The resolved function ID is missing or is the protected production function."
+            exit 1
+          fi
+
+          echo "function_id=$test_function_id" >> "$GITHUB_OUTPUT"
+          echo "endpoint=https://functions.yandexcloud.net/$test_function_id" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy the clean handler copy to the isolated test function
+        env:
+          YC_IAM_TOKEN: ${{ steps.get-iam-token.outputs.token }}
+          TEST_FUNCTION_ID: ${{ steps.test-function.outputs.function_id }}
+        run: |
+          set -euo pipefail
+
+          function_source="$RUNNER_TEMP/test-function-source"
+          mkdir -p "$function_source"
+
+          # Never copy the workspace file: read the exact tracked object from the dispatched ref.
+          # This excludes any uncommitted changes to index.py from the function artifact.
+          git cat-file -e "${GITHUB_SHA}:index.py"
+          git show "${GITHUB_SHA}:index.py" > "$function_source/index.py"
+          python3 -m py_compile "$function_source/index.py"
+
+          yc serverless function version create \
+            --function-id "$TEST_FUNCTION_ID" \
+            --runtime python312 \
+            --entrypoint index.handler \
+            --memory 128MB \
+            --execution-timeout 30s \
+            --source-path "$function_source" \
+            --service-account-id "$TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID" \
+            --environment "SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=$TEST_SMTP_TO_EMAIL" \
+            --secret "id=$TEST_SMTP_SECRET_ID,key=smtp_username,environment-variable=SMTP_USERNAME" \
+            --secret "id=$TEST_SMTP_SECRET_ID,key=smtp_password,environment-variable=SMTP_PASSWORD"
+
+          # This permission is applied only to the ID resolved from the protected test function name.
+          yc serverless function allow-unauthenticated-invoke "$TEST_FUNCTION_ID"
+
+      - name: Report endpoint for the static test build
+        run: |
+          set -euo pipefail
+          endpoint='${{ steps.test-function.outputs.endpoint }}'
+
+          if [[ "$endpoint" == "https://functions.yandexcloud.net/$PRODUCTION_FUNCTION_ID" ]]; then
+            echo "::error title=Unsafe endpoint::The workflow resolved the protected production endpoint."
+            exit 1
+          fi
+
+          echo "Test function endpoint: $endpoint"
+          echo "deploy-test.yml resolves this endpoint independently from the protected test function name and folder."

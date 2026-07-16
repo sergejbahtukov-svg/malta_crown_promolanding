@@ -7,20 +7,143 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+
+concurrency:
+  group: malta-crown-test-static
+  cancel-in-progress: false
 
 jobs:
   deploy-test:
     runs-on: ubuntu-latest
     env:
       TEST_BUCKET: malta-crown-preflight-20260714
+      # Production remains the source default. This value is never deployed to the test bucket.
+      PRODUCTION_FORM_ENDPOINT: https://functions.yandexcloud.net/d4ererc6uunkql07t59d
+      PRODUCTION_FUNCTION_ID: d4ererc6uunkql07t59d
+      PRODUCTION_SERVICE_ACCOUNT_ID: ajet2vjo0tsv19opo4ci
+      # Test-only variables. The endpoint is resolved from this protected identity, never supplied by a user variable.
+      TEST_YC_FOLDER_ID: ${{ vars.TEST_YC_FOLDER_ID }}
+      TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID }}
+      TEST_FUNCTION_NAME: malta-crown-preflight-mail
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare static test build
+      - name: Confirm test-only static deployment configuration
+        env:
+          TEST_YC_ACCESS_KEY_ID: ${{ secrets.TEST_YC_ACCESS_KEY_ID }}
+          TEST_YC_SECRET_ACCESS_KEY: ${{ secrets.TEST_YC_SECRET_ACCESS_KEY }}
         run: |
+          set -euo pipefail
+
+          for variable in TEST_YC_FOLDER_ID TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID; do
+            if [[ -z "${!variable:-}" ]]; then
+              echo "::error title=Missing test-only configuration::$variable must be set as a repository variable."
+              exit 1
+            fi
+          done
+
+          for secret in TEST_YC_ACCESS_KEY_ID TEST_YC_SECRET_ACCESS_KEY; do
+            if [[ -z "${!secret:-}" ]]; then
+              echo "::error title=Missing test-only secret::$secret must be set as a repository secret."
+              exit 1
+            fi
+          done
+
+          if [[ "$TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID" == "$PRODUCTION_SERVICE_ACCOUNT_ID" ]]; then
+            echo "::error title=Unsafe test service account::The test static workflow must not use the production service account."
+            exit 1
+          fi
+
+      - name: Install Yandex Cloud CLI
+        run: |
+          set -euo pipefail
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$RUNNER_TEMP/yandex-cloud" -n
+          echo "$RUNNER_TEMP/yandex-cloud/bin" >> "$GITHUB_PATH"
+
+      - name: Get test-only Yandex Cloud IAM token
+        id: get-iam-token
+        uses: docker://ghcr.io/yc-actions/yc-iam-token-fed:1.0.0
+        with:
+          yc-sa-id: ${{ vars.TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID }}
+
+      - name: Resolve the protected test function endpoint
+        id: test-function
+        env:
+          YC_IAM_TOKEN: ${{ steps.get-iam-token.outputs.token }}
+        run: |
+          set -euo pipefail
+
+          yc serverless function list --folder-id "$TEST_YC_FOLDER_ID" --format json > "$RUNNER_TEMP/test-functions.json"
+          test_function_id="$(python3 - "$RUNNER_TEMP/test-functions.json" "$TEST_FUNCTION_NAME" <<'PY'
+          import json
+          import sys
+
+          payload = json.load(open(sys.argv[1], encoding="utf-8"))
+          functions = payload if isinstance(payload, list) else payload.get("functions", payload.get("items", []))
+          matches = [item.get("id", "") for item in functions if item.get("name") == sys.argv[2]]
+          if len(matches) != 1:
+              raise SystemExit("Expected exactly one test function with the protected test name.")
+          print(matches[0])
+          PY
+          )"
+
+          if [[ -z "$test_function_id" || "$test_function_id" == "$PRODUCTION_FUNCTION_ID" ]]; then
+            echo "::error title=Unsafe test function::The resolved function ID is missing or is the protected production function."
+            exit 1
+          fi
+
+          echo "endpoint=https://functions.yandexcloud.net/$test_function_id" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare static test build
+        env:
+          TEST_FORM_ENDPOINT: ${{ steps.test-function.outputs.endpoint }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${TEST_FORM_ENDPOINT:-}" ]]; then
+            echo "::error title=Missing test form endpoint::The protected test function endpoint could not be resolved."
+            exit 1
+          fi
+
+          if [[ "$TEST_FORM_ENDPOINT" == "$PRODUCTION_FORM_ENDPOINT" ]]; then
+            echo "::error title=Unsafe test form endpoint::TEST_FORM_ENDPOINT must not equal the production Cloud Function endpoint."
+            exit 1
+          fi
+
+          if ! [[ "$TEST_FORM_ENDPOINT" =~ ^https://functions\.yandexcloud\.net/[a-z0-9]{20}$ ]]; then
+            echo "::error title=Invalid test form endpoint::TEST_FORM_ENDPOINT must be a Yandex Cloud Function URL in the expected format."
+            exit 1
+          fi
+
           mkdir -p "$RUNNER_TEMP/site"
           cp index.html consent.html privacy.html "$RUNNER_TEMP/site/"
           cp -R assets "$RUNNER_TEMP/site/assets"
+
+          # Only the disposable runner artifact receives the test endpoint. Source files keep
+          # the production endpoint so production deployments cannot inherit test routing.
+          python3 - "$RUNNER_TEMP/site/index.html" "$PRODUCTION_FORM_ENDPOINT" "$TEST_FORM_ENDPOINT" <<'PY'
+          from pathlib import Path
+          import sys
+
+          path = Path(sys.argv[1])
+          production_endpoint = sys.argv[2]
+          test_endpoint = sys.argv[3]
+          html = path.read_text(encoding="utf-8")
+          occurrences = html.count(production_endpoint)
+
+          if occurrences != 1:
+              raise SystemExit(
+                  f"Expected exactly one production form endpoint in the test artifact, found {occurrences}."
+              )
+
+          html = html.replace(production_endpoint, test_endpoint)
+
+          if production_endpoint in html or html.count(test_endpoint) != 1:
+              raise SystemExit("Test endpoint replacement verification failed.")
+
+          path.write_text(html, encoding="utf-8")
+          PY
 
       - name: Install AWS CLI
         run: |
@@ -31,8 +154,8 @@ jobs:
 
       - name: Sync static site to isolated test bucket
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEST_YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_YC_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ru-central1
           AWS_ENDPOINT_URL: https://storage.yandexcloud.net
         run: |
