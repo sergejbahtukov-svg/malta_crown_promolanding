@@ -31,8 +31,8 @@ jobs:
       TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_DEPLOYER_SERVICE_ACCOUNT_ID }}
       TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID }}
       TEST_SMTP_SECRET_ID: ${{ vars.TEST_SMTP_SECRET_ID }}
-      # The test recipient is intentionally fixed; the existing mailbox rule forwards it onward.
-      TEST_SMTP_TO_EMAIL: sbahtyukov@ya.ru
+      # Direct delivery to the approved recipients; no mailbox forwarding is used.
+      TEST_SMTP_TO_EMAIL: sbahtyukov@ya.ru,mskoffice@maltacrown.ru
       TEST_FUNCTION_NAME: malta-crown-preflight-mail
     steps:
       - uses: actions/checkout@v4
@@ -57,13 +57,8 @@ jobs:
             fi
           done
 
-          if [[ "$TEST_SMTP_TO_EMAIL" == "$PRODUCTION_SMTP_RECIPIENT" ]]; then
-            echo "::error title=Unsafe test recipient::TEST_SMTP_TO_EMAIL must not be the production recipient."
-            exit 1
-          fi
-
-          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtyukov@ya.ru" ]]; then
-            echo "::error title=Unsafe test recipient::The test recipient is protected and must remain sbahtyukov@ya.ru."
+          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtyukov@ya.ru,mskoffice@maltacrown.ru" ]]; then
+            echo "::error title=Unsafe test recipients::The protected direct-delivery recipient list must remain unchanged."
             exit 1
           fi
 

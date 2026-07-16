@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -14,24 +15,15 @@ CORS_HEADERS = {
     'Content-Type': 'application/json; charset=utf-8',
 }
 
-REQUIRED_FIELDS = ('name', 'phone', 'age')
+REQUIRED_FIELDS = ('name', 'phone', 'contact_channel')
 
 FIELD_LABELS = (
-    ('name', 'Name'),
-    ('phone', 'Phone'),
-    ('email', 'Email'),
-    ('age', 'Child age'),
-    ('message', 'Message'),
-    ('consent', 'Consent'),
-    ('page', 'Page'),
-    ('referrer', 'Referrer'),
-    ('utm_source', 'UTM source'),
-    ('utm_medium', 'UTM medium'),
-    ('utm_campaign', 'UTM campaign'),
-    ('utm_content', 'UTM content'),
-    ('utm_term', 'UTM term'),
-    ('yclid', 'Yandex click ID'),
+    ('name', 'Имя'),
+    ('phone', 'Телефон'),
+    ('contact_channel', 'Удобный канал связи'),
 )
+
+EMAIL_ADDRESS_PATTERN = re.compile(r'^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$')
 
 
 def _response(status_code, payload=None):
@@ -76,20 +68,36 @@ def _normalize_payload(payload):
 
 
 def _format_lead(data):
-    lines = ['New lead from Malta Crown website', '']
-    used_keys = set()
+    lines = ['Новая заявка с сайта Malta Crown', '']
 
     for key, label in FIELD_LABELS:
         value = data.get(key)
         if value:
             lines.append(f'{label}: {value}')
-            used_keys.add(key)
-
-    for key in sorted(data.keys()):
-        if key not in used_keys:
-            lines.append(f'{key}: {data[key]}')
 
     return '\n'.join(lines)
+
+
+def _get_smtp_recipients(raw_recipients):
+    if not isinstance(raw_recipients, str):
+        raise ValueError('SMTP_TO_EMAIL must be a comma-separated string')
+
+    recipients = []
+    seen = set()
+    for raw_recipient in raw_recipients.split(','):
+        recipient = raw_recipient.strip()
+        if not EMAIL_ADDRESS_PATTERN.fullmatch(recipient):
+            raise ValueError('SMTP_TO_EMAIL contains an invalid recipient')
+
+        normalized = recipient.lower()
+        if normalized not in seen:
+            recipients.append(normalized)
+            seen.add(normalized)
+
+    if not recipients:
+        raise ValueError('SMTP_TO_EMAIL must contain at least one recipient')
+
+    return recipients
 
 
 def handler(event, context):
@@ -123,12 +131,14 @@ def handler(event, context):
         smtp_port = int(os.environ.get('SMTP_PORT', '465'))
         smtp_username = os.environ.get('SMTP_USERNAME', '')
         smtp_password = os.environ.get('SMTP_PASSWORD', '')
-        to_email = os.environ.get('SMTP_TO_EMAIL', 'mskoffice@maltacrown.ru')
+        recipients = _get_smtp_recipients(
+            os.environ.get('SMTP_TO_EMAIL', 'mskoffice@maltacrown.ru')
+        )
 
         msg = MIMEMultipart()
         msg['From'] = smtp_username
-        msg['To'] = to_email
-        msg['Subject'] = 'New lead from Malta Crown website'
+        msg['To'] = ', '.join(recipients)
+        msg['Subject'] = 'Новая заявка с сайта Malta Crown'
 
         reply_to = data.get('email', '')
         if '@' in reply_to and '\n' not in reply_to and '\r' not in reply_to:
@@ -138,7 +148,7 @@ def handler(event, context):
 
         server = smtplib.SMTP_SSL(smtp_host, smtp_port)
         server.login(smtp_username, smtp_password)
-        server.send_message(msg)
+        server.send_message(msg, from_addr=smtp_username, to_addrs=recipients)
         server.quit()
 
         return _response(200, {'status': 'success', 'message': 'Email sent'})
