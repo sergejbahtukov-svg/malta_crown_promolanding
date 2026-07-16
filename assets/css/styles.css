@@ -747,10 +747,6 @@ body {
   outline: none;
 }
 
-.mc-nav__phone {
-  display: none;
-}
-
 .mc-header__contacts {
   display: flex;
   justify-self: end;
@@ -3858,16 +3854,6 @@ body {
 
   .mc-header__contacts {
     display: none;
-  }
-
-  .mc-nav__phone {
-    display: inline-flex;
-    min-height: 46px;
-    margin-top: 6px;
-    border: 1px solid rgba(189, 30, 36, 0.24);
-    background: rgba(189, 30, 36, 0.08);
-    color: var(--mc-red-dark);
-    font-size: 13px;
   }
 
   .mc-nav {
