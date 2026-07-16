@@ -6809,3 +6809,15 @@ body {
     animation: none;
   }
 }
+
+/* Keep the editorial reading order explicit at the narrowest mobile widths. */
+@media (max-width: 389px) {
+  .mc-boarding__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "content"
+      "media"
+      "routine";
+  }
+}
