@@ -17,7 +17,7 @@ jobs:
   deploy-test:
     runs-on: ubuntu-latest
     env:
-      TEST_BUCKET: malta-crown-preflight-20260714
+      TEST_BUCKET: malta-crown-promolanding-1
       # Production remains the source default. This value is never deployed to the test bucket.
       PRODUCTION_FORM_ENDPOINT: https://functions.yandexcloud.net/d4ererc6uunkql07t59d
       PRODUCTION_FUNCTION_ID: d4ererc6uunkql07t59d
