@@ -1,6 +1,12 @@
 name: Deploy isolated test mail function
 
 on:
+  push:
+    branches:
+      - landing-test
+    paths:
+      - .github/workflows/deploy-test-function.yml
+      - index.py
   workflow_dispatch:
     inputs:
       confirm_test_function_deploy:
@@ -41,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "${{ inputs.confirm_test_function_deploy }}" != "DEPLOY_ISOLATED_TEST_FUNCTION" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.confirm_test_function_deploy }}" != "DEPLOY_ISOLATED_TEST_FUNCTION" ]]; then
             echo "::error title=Explicit confirmation required::This workflow only runs after the exact test-only confirmation is supplied."
             exit 1
           fi
