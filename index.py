@@ -131,9 +131,11 @@ def handler(event, context):
         smtp_port = int(os.environ.get('SMTP_PORT', '465'))
         smtp_username = os.environ.get('SMTP_USERNAME', '')
         smtp_password = os.environ.get('SMTP_PASSWORD', '')
-        recipients = _get_smtp_recipients(
-            os.environ.get('SMTP_TO_EMAIL', 'mskoffice@maltacrown.ru')
-        )
+        raw_recipients = os.environ.get('SMTP_TO_EMAIL', 'mskoffice@maltacrown.ru')
+        extra_recipients = os.environ.get('SMTP_TO_EMAIL_EXTRA', '').strip()
+        if extra_recipients:
+            raw_recipients = f'{raw_recipients},{extra_recipients}'
+        recipients = _get_smtp_recipients(raw_recipients)
 
         msg = MIMEMultipart()
         msg['From'] = smtp_username

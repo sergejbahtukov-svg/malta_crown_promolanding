@@ -38,7 +38,9 @@ jobs:
       TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID: ${{ vars.TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID }}
       TEST_SMTP_SECRET_ID: ${{ vars.TEST_SMTP_SECRET_ID }}
       # Direct delivery to the approved recipients; no mailbox forwarding is used.
-      TEST_SMTP_TO_EMAIL: sbahtukov@yandex.ru,mskoffice@maltacrown.ru
+      # Keep the values separate because YC CLI uses commas between environment variables.
+      TEST_SMTP_TO_EMAIL: sbahtukov@yandex.ru
+      TEST_SMTP_TO_EMAIL_EXTRA: mskoffice@maltacrown.ru
       TEST_FUNCTION_NAME: malta-crown-preflight-mail
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +65,7 @@ jobs:
             fi
           done
 
-          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtukov@yandex.ru,mskoffice@maltacrown.ru" ]]; then
+          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtukov@yandex.ru" || "$TEST_SMTP_TO_EMAIL_EXTRA" != "mskoffice@maltacrown.ru" ]]; then
             echo "::error title=Unsafe test recipients::The protected direct-delivery recipient list must remain unchanged."
             exit 1
           fi
@@ -154,7 +156,7 @@ jobs:
             --execution-timeout 30s \
             --source-path "$function_source" \
             --service-account-id "$TEST_YC_RUNTIME_SERVICE_ACCOUNT_ID" \
-            --environment "SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=$TEST_SMTP_TO_EMAIL" \
+            --environment "SMTP_HOST=smtp.yandex.ru,SMTP_PORT=465,SMTP_TO_EMAIL=$TEST_SMTP_TO_EMAIL,SMTP_TO_EMAIL_EXTRA=$TEST_SMTP_TO_EMAIL_EXTRA" \
             --secret "id=$TEST_SMTP_SECRET_ID,key=smtp_username,environment-variable=SMTP_USERNAME" \
             --secret "id=$TEST_SMTP_SECRET_ID,key=smtp_password,environment-variable=SMTP_PASSWORD"
 
