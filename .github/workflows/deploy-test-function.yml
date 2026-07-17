@@ -33,7 +33,7 @@ jobs:
       TEST_SMTP_SECRET_ID: ${{ vars.TEST_SMTP_SECRET_ID }}
       # Direct delivery to the approved recipients; no mailbox forwarding is used.
       # Keep the values separate because YC CLI uses commas between environment variables.
-      TEST_SMTP_TO_EMAIL: sbahtukov@yandex.ru
+      TEST_SMTP_TO_EMAIL: sbahtyukov@yandex.ru
       TEST_SMTP_TO_EMAIL_EXTRA: mskoffice@maltacrown.ru
       TEST_FUNCTION_NAME: malta-crown-preflight-mail
     steps:
@@ -59,7 +59,7 @@ jobs:
             fi
           done
 
-          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtukov@yandex.ru" || "$TEST_SMTP_TO_EMAIL_EXTRA" != "mskoffice@maltacrown.ru" ]]; then
+          if [[ "$TEST_SMTP_TO_EMAIL" != "sbahtyukov@yandex.ru" || "$TEST_SMTP_TO_EMAIL_EXTRA" != "mskoffice@maltacrown.ru" ]]; then
             echo "::error title=Unsafe test recipients::The protected direct-delivery recipient list must remain unchanged."
             exit 1
           fi
